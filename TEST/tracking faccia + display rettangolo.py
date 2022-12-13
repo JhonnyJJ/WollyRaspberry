@@ -2,7 +2,7 @@ import cv2, sys, time, os, io
 from pygame import mixer
 from gtts import gTTS
 from motors import stop, avanti, indietro, destra, sinistra
-from talking import *
+
 
 global numFaces
 
