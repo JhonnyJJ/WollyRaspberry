@@ -1,6 +1,10 @@
 # Wolly
 ## Installazione preliminare
 
+### Credenziali Wolly
+User: wolly
+Password: wolly123
+
 ### Modifica IP
 * Collegare Wolly ad una rete wifi
 * Identificare l'indirizzo ip del Raspberry inserirendo nel terminale il comando 

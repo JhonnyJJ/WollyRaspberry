@@ -1,19 +1,19 @@
-import cv2, sys, time, os, io
-from pygame import mixer
+import cv2
+import time
 from gtts import gTTS
-from motors import stop, avanti, indietro, destra, sinistra
+from pygame import mixer
 
+from motors import stop, avanti, indietro, destra, sinistra
 
 global numFaces
 
-numFaces = 0
 
 def textSpeech():
     mixer.init()
     print('parla')
     text = 'Ciao sono Wolly!'
     tts = gTTS(text=text, lang='it')
-    tts.save('tts.mp3')
+    tts.save('mp3/tts.mp3')
     mixer.music.load('tts.mp3')
     mixer.music.play()
 
