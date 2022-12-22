@@ -3,6 +3,8 @@ import speech_recognition as sr
 from pygame import mixer
 from gtts import gTTS
 
+r = sr.Recognizer()
+mic = sr.Microphone()
 
 run = True
 
@@ -17,9 +19,12 @@ def speak(text,filename):
     mixer.music.play()
     
 def get_audio():
-    r= sr.Recognizer()
     with sr.Microphone() as source:
-        audio = r.listen(source)
+        listen = sr.Recognizer()
+        listen.energy_threshold = 335.9141163575556
+        #r.adjust_for_ambient_noise(source)
+        listen.dynamic_energy_threshold = True
+        audio = listen.listen(source)
         said = ""
         
         try:
