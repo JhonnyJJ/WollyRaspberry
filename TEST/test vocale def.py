@@ -8,7 +8,8 @@ run = True
 
 def textSpeech(text):
     mixer.init()
-    print('parla')
+    print('parlo')
+    print("dico" + text)
     tts = gTTS(text=text)
     tts.save('tts.mp3')
     mixer.music.load('tts.mp3')
@@ -25,7 +26,6 @@ while run:
             audio = recognizer.listen(source, timeout = 5.0)
             response = recognizer.recognize_google(audio)
             print(response)
-            print("parlo")
             textSpeech(response)
         except sr.UnknownValueError:
             print("Non ho capito")
