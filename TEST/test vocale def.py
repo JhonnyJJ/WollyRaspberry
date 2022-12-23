@@ -1,14 +1,14 @@
 import os
+import cv2
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
 
 run = True
 
-def textSpeech():
+def textSpeech(text):
     mixer.init()
     print('parla')
-    text = 'Ciao sono Wolly!'
     tts = gTTS(text=text)
     tts.save('mp3/tts.mp3')
     mixer.music.load('tts.mp3')
@@ -25,5 +25,10 @@ while run:
             audio = recognizer.listen(source, timeout = 5.0)
             response = recognizer.recognize_google(audio)
             print(response)
+            print("parlo")
+            textSpeech(response)
         except sr.UnknownValueError:
             print("Non ho capito")
+
+    if cv2.waitKey(1) & 0xFF ==ord('s'):
+        break
