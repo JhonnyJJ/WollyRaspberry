@@ -10,7 +10,7 @@ def textSpeech(text):
     mixer.init()
     print('parla')
     tts = gTTS(text=text)
-    tts.save('mp3/tts.mp3')
+    tts.save('tts.mp3')
     mixer.music.load('tts.mp3')
     mixer.music.play()
     
