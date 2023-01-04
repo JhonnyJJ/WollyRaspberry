@@ -9,7 +9,7 @@ def textSpeech(text):
     mixer.init()
     print('parlo')
     print("dico " + text)
-    tts = gTTS(text=text)
+    tts = gTTS(text=text, lang='it')
     tts.save('tts.mp3')
     mixer.music.load('tts.mp3')
     mixer.music.play()
