@@ -6,6 +6,8 @@ from gtts import gTTS
 from pygame import mixer
 
 
+#possible implementation of a wake word so he can talk when somebody speaks to him
+
 run = True
 
 responses = {
@@ -13,7 +15,6 @@ responses = {
     "come stai": "bene grazie!",
     "buona giornata": "grazie anche a te!"
 }
-
 
 def textSpeech(text, filename):
     mixer.init()

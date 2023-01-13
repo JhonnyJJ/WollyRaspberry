@@ -56,8 +56,8 @@ while True:
             textSpeech()
             numFaces = len(faces)
         print(len(faces), numFaces)
-    '''elif len(faces) == 0:
-        numFaces = 0'''
+    #elif len(faces) == 0:
+    #    numFaces = 0
 
     print("Found " + str(len(faces)) + " face(s)")
     
@@ -108,9 +108,10 @@ while True:
     
     #resize and flip to show camera feed with squares
     #creation of the camera feed window
-    '''frame = cv2.resize(frame, (320,200))
-    frame = cv2.flip(frame,1)
-    cv2.imshow('Video', frame)'''
+
+    #frame = cv2.resize(frame, (320,200))
+    #frame = cv2.flip(frame,1)
+    #cv2.imshow('Video', frame)
         
     #input s to stop
     if cv2.waitKey(1) & 0xFF ==ord('s'):
