@@ -22,19 +22,19 @@ def textSpeech(text, filename):
     tts.save(filename)
     mixer.music.load(filename)
     mixer.music.play()
-    while mixer.music.get_busy():  # wait for music to finish playing
-        time.sleep(0.5)
-    pygame.quit()
+    #while mixer.music.get_busy():  # wait for music to finish playing
+    #    time.sleep(0.5)
+    #pygame.quit() 
 
 
 def chatbot(text):
     user_response = text.lower()
-    err = "non ho capito, puoi ripetere?"
+    err = "non ho sentito bene, puoi ripetere?"
     if user_response in responses:
-        #print("Wolly: " + responses[user_response])
+        print("Wolly: " + responses[user_response])
         textSpeech(responses[user_response], 'tts.mp3')
     else:
-        #print(err)
+        print(err)
         textSpeech(err, 'tts.mp3')
 
 
@@ -45,10 +45,10 @@ while run:
         recognizer.dynamic_energy_threshold = 3000
 
         try:
-            #print("ascolto")
+            print("ascolto")
             audio = recognizer.listen(source)
             response = recognizer.recognize_google(audio, language="IT-IT")
-            #print(response)
+            print(response)
             chatbot(response)
         except sr.UnknownValueError:
             print("Non ho capito")
