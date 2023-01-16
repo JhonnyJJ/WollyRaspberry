@@ -13,7 +13,7 @@ run = True
 
 while run == True:
     
-    text = "goodbye"
+    text = input()
     
     if "hello" in text:
         speak("Ciao Umano", 'prova.mp3')
