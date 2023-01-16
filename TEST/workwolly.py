@@ -5,7 +5,7 @@ from gtts import gTTS
 from pygame import mixer
 from motors import stop, avanti, indietro, destra, sinistra
 
-global numFaces
+numFaces = 0
 
 # possible implementation of a wake word, so he can talk when somebody speaks to him
 
@@ -72,7 +72,7 @@ while True:
     # if the number of faces is greater than the number of faces already recognised Wolly will introduce himself again
     if 0 < len(faces):
         if len(faces) > numFaces:
-            print("max num persone->"+ numFaces)
+            print("max num persone->"+ str(numFaces))
             textSpeech("Ciao io mi chiamo Wolly! Salutami o chiedimi qualcosa", "tts.mp3")
             numFaces = len(faces)
 
