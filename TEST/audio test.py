@@ -21,4 +21,6 @@ while run == True:
         
     if "goodbye" in text:
         speak("Ciao", 'prova.mp3')
+        while mixer.music.get_busy():  # wait for music to finish playing
+            time.sleep(0.5)
         run = False

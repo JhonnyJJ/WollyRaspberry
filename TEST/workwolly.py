@@ -76,7 +76,7 @@ while True:
             textSpeech("Ciao io mi chiamo Wolly! Salutami o chiedimi qualcosa", "tts.mp3")
             numFaces = len(faces)
 
-    print("vedo " + str(len(faces)) + " faccai/ facce")
+    print("vedo " + str(len(faces)) + " faccia/ facce")
 
     # create a green rectangle around the found faces
     for (x, y, w, h) in faces:
