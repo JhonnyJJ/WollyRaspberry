@@ -1,3 +1,4 @@
+import time
 from pygame import mixer
 from gtts import gTTS
 
@@ -8,6 +9,8 @@ def speak(text,filename):
     tts.save(filename)
     mixer.music.load(filename)
     mixer.music.play()
+    while mixer.music.get_busy():  # wait for music to finish playing
+        time.sleep(0.5)
     
 run = True
 
