@@ -55,8 +55,6 @@ while True:
             textSpeech()
             numFaces = len(faces)
         print(len(faces), numFaces)
-    # elif len(faces) == 0:
-    #    numFaces = 0
 
     print("Found " + str(len(faces)) + " face(s)")
 

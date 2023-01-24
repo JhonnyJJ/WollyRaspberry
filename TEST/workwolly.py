@@ -17,7 +17,8 @@ saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
 
 # error phrases
 err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa",
-       "faccio difficoltà a capire cosa intendi", "vorrei poterti darea una rispota ma non posso!", "ora non so risponderti, quando conoscerò la risposta sarai la prima persona a cui lo dirò!"]
+       "faccio difficoltà a capire cosa intendi", "vorrei poterti dare una risposta ma non posso!",
+       "ora non so risponderti, quando saprò la risposta sarai la prima persona a cui lo dirò!"]
 
 # not understood phrases
 notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scusa non ho capito potresti ripetere?",
@@ -62,27 +63,26 @@ def chatbot(text):
 
 
 def awake():
+    global stop_listening
     stop_listening(wait_for_stop= False)
     with sr.Microphone() as source:
-        recogni.adjust_for_ambient_noise(source,2)
+        r.adjust_for_ambient_noise(source, 2)
         try:
-            microphone = recogni.listen(source)
-            response = recogni.recognize_google(microphone, language="IT-IT")
+            microphone = r.listen(source)
+            response = r.recognize_google(microphone, language="IT-IT")
             print(response)
             chatbot(response)
-            global stop_listening
-            stop_listening = recogni.listen_in_background(microph, callback)
+            background()
         except sr.UnknownValueError:
             global i
             i += 1
             if i <= 2:
                 print("non ho capito, puoi ripetere?")
                 textSpeech(random.choice(notundst), "tts.mp3")
-                stop_listening = recogni.listen_in_background(microph, callback)
                 awake()
             else:
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!", "tts.mp3")
-                stop_listening = recogni.listen_in_background(microph, callback)
+                background()
                 return
 
 
@@ -102,17 +102,17 @@ def callback(recognizer, audio):
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
 def background():
-    global recogni
-    global microph
-    recogni = sr.Recognizer()
-    microph = sr.Microphone()
+    global r
+    global m
+    r = sr.Recognizer()
+    m = sr.Microphone()
 
     with sr.Microphone() as source:
-        recogni.adjust_for_ambient_noise(source,2)
+        r.adjust_for_ambient_noise(source,2)
 
     print("listen background")
     global stop_listening
-    stop_listening = recogni.listen_in_background(microph, callback)
+    stop_listening = r.listen_in_background(m, callback)
 
 
 run = True
