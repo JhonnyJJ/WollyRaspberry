@@ -4,7 +4,8 @@ import random
 import pygame
 import speech_recognition as sr
 from gtts import gTTS
-from pygame import mixer
+from pydub import AudioSegment
+from pydub.playback import play
 
 global numFaces
 global i
@@ -28,37 +29,34 @@ noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!", "pur
 goodbye = ["nulla", "niente", "lascia stare"]
 
 responses = {
-    "ciao": "heila ciao",
+    "ciao": "heila ciao, come posso esserti utile?",
     "come stai": "bene grazie!",
     "buona giornata": "grazie anche a te!"
 }
 
+def playsound(filepath):
+    song = AudioSegment.from_mp3(filepath)
+    play(song)
 
-def textSpeech(text, filename):
-    mixer.init()
+def textSpeech(text):
     # print('parlo')
     tts = gTTS(text=text, lang='it')
-    tts.save(filename)
-    mixer.music.load(filename)
-    mixer.music.play()
-    while mixer.music.get_busy():  # wait for music to finish playing
-        time.sleep(0.5)
-    pygame.quit()
-
+    tts.save("tts.mp3")
+    playsound("tts.mp3")
 
 def chatbot(text):
     user_response = text.lower()
 
     if user_response in goodbye:
-        textSpeech(random.choice(goodbye) + "resto in ascolto", 'tts.mp3')
+        textSpeech(random.choice(goodbye) + "resto in ascolto")
         return
 
     if user_response in responses:
         print("Wolly: " + responses[user_response])
-        textSpeech(responses[user_response], 'tts.mp3')
+        textSpeech(responses[user_response])
     else:
         print(random.choice(err))
-        textSpeech(random.choice(err), 'tts.mp3')
+        textSpeech(random.choice(err))
 
 
 def awake():
@@ -67,7 +65,8 @@ def awake():
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source, 2)
         try:
-            print("ascolto") # add sound to help to know when he is hearing
+            # add sound to help to know when to talk
+            playsound("hearing.mp3")
             microphone = r.listen(source)
             response = r.recognize_google(microphone, language="IT-IT")
             print(response)
@@ -78,10 +77,10 @@ def awake():
             i += 1
             if i <= 2:
                 print("non ho capito, puoi ripetere?")
-                textSpeech(random.choice(notundst), "tts.mp3")
+                textSpeech(random.choice(notundst))
                 awake()
             else:
-                textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!", "tts.mp3")
+                textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
                 background()
                 return
 
@@ -91,7 +90,7 @@ def callback(recognizer, audio):
         text = recognizer.recognize_google(audio, language="IT-IT")
         #wake word
         if text.lower() in wword:
-            textSpeech(random.choice(saluto) + ", dimmi pure", "tts.mp3")
+            textSpeech(random.choice(saluto) + ", dimmi pure")
             # value to keep track of how many tries the bot needs to ask
             global i
             i = 0
