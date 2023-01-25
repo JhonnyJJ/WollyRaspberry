@@ -5,7 +5,6 @@ import pygame
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
-from motors import stop, avanti, indietro, destra, sinistra
 
 global numFaces
 global i
@@ -68,6 +67,7 @@ def awake():
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source, 2)
         try:
+            print("ascolto") # add sound to help to know when he is hearing
             microphone = r.listen(source)
             response = r.recognize_google(microphone, language="IT-IT")
             print(response)
