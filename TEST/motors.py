@@ -46,7 +46,7 @@ def stop():
     pca.channels[3].duty_cycle = 0x0000
 
 
-def avanti(duration, power):
+def indietro(duration, power):
     stop()
     pca.channels[0].duty_cycle = power
     pca.channels[1].duty_cycle = power
@@ -55,7 +55,7 @@ def avanti(duration, power):
     time.sleep(duration)
 
 
-def indietro(duration, power):
+def avanti(duration, power):
     stop()
     pca.channels[0].duty_cycle = power
     pca.channels[2].duty_cycle = power

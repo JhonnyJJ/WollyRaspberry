@@ -43,6 +43,7 @@ def textSpeech(text):
     # print('parlo')
     tts = gTTS(text=text, lang='it')
     tts.save("tts.mp3")
+    time.sleep(2)
     playsound("tts.mp3")
 
 def chatbot(text):
@@ -88,6 +89,7 @@ def awake():
 
 def callback(recognizer, audio):
     try:
+        print("listen")
         text = recognizer.recognize_google(audio, language="IT-IT")
         #wake word
         if text.lower() in wword:
@@ -116,15 +118,10 @@ def background():
 
 
 run = True
+numFaces=0
 
 # cascade classifier for face tracking
 face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
-
-# inizializing camera capture
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320);
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200);
-time.sleep(1)
 
 # inizializing camera capture
 cap = cv2.VideoCapture(0)

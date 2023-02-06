@@ -17,7 +17,7 @@ def textSpeech():
     mixer.music.load('tts.mp3')
     mixer.music.play()
 
-
+numFaces = 0
 # cascade classifier for face tracking
 face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
 
