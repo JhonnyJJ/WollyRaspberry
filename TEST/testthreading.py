@@ -63,7 +63,6 @@ def chatbot(text):
 
 
 def awake():
-    stop_listening(wait_for_stop= False)
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source, 2)
         try:
@@ -105,7 +104,24 @@ def background():
                 # value to keep track of how many tries the bot needs to ask
                 global i
                 i = 0
-                awake()
+                with sr.Microphone() as source:
+                    r.adjust_for_ambient_noise(source, 2)
+                    try:
+                        # add sound to help to know when to talk
+                        playsound("hearing.mp3")
+                        microphone = r.listen(source)
+                        response = r.recognize_google(microphone, language="IT-IT")
+                        print(response)
+                        chatbot(response)
+                        background()
+                    except sr.UnknownValueError:
+                        i += 1
+                        if i <= 2:
+                            print("non ho capito, puoi ripetere?")
+                            textSpeech(random.choice(notundst))
+                        else:
+                            textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
+                            background()
         except sr.UnknownValueError:
             print("Could not understand audio")
         except sr.RequestError as e:
@@ -128,9 +144,7 @@ time.sleep(1)
 if not cap.isOpened():
     raise IOError("Cannot open webcam")
 
-listen = Thread(target=background).start()
 while run:
-    listen.run()
     # capture frame by frame
     ret, frame = cap.read()
 
@@ -199,7 +213,3 @@ while run:
             stop()
 
         break
-
-cap.release()
-print("stop recording")
-stop_listening(wait_for_stop=False)
