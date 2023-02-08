@@ -3,19 +3,21 @@ import time
 from gtts import gTTS
 from pygame import mixer
 
-from motors import stop, avanti, indietro, destra, sinistra
+from motorsNew import avanti, indietro, destra, sinistra
 
 global numFaces
 
 
-def textSpeech():
+def playsound(filepath):
     mixer.init()
-    print('parla')
-    text = 'Ciao sono Wolly!'
-    tts = gTTS(text=text, lang='it')
-    tts.save('tts.mp3')
-    mixer.music.load('tts.mp3')
+    mixer.music.load(filepath)
     mixer.music.play()
+
+def textSpeech(text):
+    # print('parlo')
+    tts = gTTS(text=text, lang='it')
+    tts.save("tts.mp3")
+    playsound("tts.mp3")
 
 numFaces = 0
 # cascade classifier for face tracking
@@ -81,25 +83,23 @@ while True:
         # if the face coordinate is < of the left border the robot needs to be moving left
         # if the face coordinate is > of the right border the robot needs to be moving right
         if x < deadzone_sx and x > correct_sx:
-            sinistra(0.05, 0x61A8)
-            stop()
+            sinistra(0.05, 0.6)
+            
         elif x > deadzone_rx and x < correct_rx:
-            destra(0.05, 0x61A8)
-            stop()
-        elif x > correct_rx:
-            destra(0.1, 0x61A8)
-            stop()
-        elif x < correct_sx:
-            sinistra(0.1, 0x61A8)
-            stop()
+            destra(0.05, 0.6)
 
+        elif x > correct_rx:
+            destra(0.1, 0.6)
+            
+        elif x < correct_sx:
+            sinistra(0.1, 0.6)
+            
         # if the width of the rectangle is greater than 110 it means that the face is too close to the robot, vice versa if it's lower than 52
         if w > 110:
-            indietro(0.09, 0x61A8)
-            stop()
+            indietro(0.09, 0.6)
+            
         elif w < 52:
-            avanti(0.09, 0x61A8)
-            stop()
+            avanti(0.09, 0.6)
 
         break
 

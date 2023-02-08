@@ -4,8 +4,8 @@ import random
 import pygame
 import speech_recognition as sr
 from gtts import gTTS
-from pydub import AudioSegment
-from pydub.playback import play
+from pygame import mixer
+
 from motors import stop, avanti, indietro, destra, sinistra
 
 global numFaces
@@ -36,14 +36,14 @@ responses = {
 }
 
 def playsound(filepath):
-    song = AudioSegment.from_mp3(filepath)
-    play(song)
+    mixer.init()
+    mixer.music.load(filepath)
+    mixer.music.play()
 
 def textSpeech(text):
     # print('parlo')
     tts = gTTS(text=text, lang='it')
     tts.save("tts.mp3")
-    time.sleep(2)
     playsound("tts.mp3")
 
 def chatbot(text):
@@ -97,7 +97,7 @@ def callback(recognizer, audio):
             # value to keep track of how many tries the bot needs to ask
             global i
             i = 0
-            chat = Tresh(target=awake)#DA CONTROLLARE
+            chat = Tread(target=awake)#DA CONTROLLARE
             chat.start()
     except sr.UnknownValueError:
         print("Could not understand audio")
