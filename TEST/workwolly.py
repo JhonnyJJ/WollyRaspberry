@@ -97,7 +97,8 @@ def callback(recognizer, audio):
             # value to keep track of how many tries the bot needs to ask
             global i
             i = 0
-            awake()
+            chat = Tresh(target=awake)#DA CONTROLLARE
+            chat.start()
     except sr.UnknownValueError:
         print("Could not understand audio")
     except sr.RequestError as e:
