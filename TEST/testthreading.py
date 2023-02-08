@@ -63,7 +63,6 @@ def chatbot(text):
 
 
 def awake():
-    stop_listening(wait_for_stop= False)
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source, 2)
         try:
@@ -130,7 +129,6 @@ if not cap.isOpened():
 
 listen = Thread(target=background).start()
 while run:
-    listen.run()
     # capture frame by frame
     ret, frame = cap.read()
 
