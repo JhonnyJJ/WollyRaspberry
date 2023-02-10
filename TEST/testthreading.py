@@ -121,13 +121,15 @@ def background():
                             textSpeech(random.choice(notundst))
                         else:
                             textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
+                            return
         except sr.UnknownValueError:
             j -= 1
             print("Could not understand audio")
             if j==0:
-                #esc dal while
+                return
         except sr.RequestError as e:
             print("Could not request results from Google Speech Recognition service; {0}".format(e))
+            return
 
 while True:
     # capture frame by frame
