@@ -35,7 +35,7 @@ if not cap.isOpened():
 
 # infinite loop, it can be stopped with any desired input
 while True:
-
+    
     # capture frame by frame
     ret, frame = cap.read()
 
@@ -115,4 +115,4 @@ while True:
         break
 
 cap.release()
-cv2.destroyAllWindows()
+#cv2.destroyAllWindows()

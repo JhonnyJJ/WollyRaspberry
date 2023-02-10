@@ -5,8 +5,9 @@ import pygame
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
+from threading import Thread
 
-from motors import stop, avanti, indietro, destra, sinistra
+from motorsNew import avanti, indietro, destra, sinistra
 
 global numFaces
 global i
@@ -118,7 +119,6 @@ def background():
     stop_listening = r.listen_in_background(m, callback)
 
 
-run = True
 numFaces=0
 
 # cascade classifier for face tracking
@@ -135,8 +135,8 @@ if not cap.isOpened():
     raise IOError("Cannot open webcam")
 
 background()
-while run:
-
+while True:
+    
     # capture frame by frame
     ret, frame = cap.read()
 
@@ -155,7 +155,7 @@ while run:
     if 0 < len(faces) != numFaces:
         if len(faces) > numFaces:
             print("TTS", len(faces), numFaces)
-            textSpeech("Ciao, sono Wolly!")
+            textSpeech("Ciao sono Wolly!")
             numFaces = len(faces)
         print(len(faces), numFaces)
 
@@ -184,25 +184,23 @@ while run:
         # if the face coordinate is < of the left border the robot needs to be moving left
         # if the face coordinate is > of the right border the robot needs to be moving right
         if x < deadzone_sx and x > correct_sx:
-            sinistra(0.05, 0x61A8)
-            stop()
+            sinistra(0.05, 0.6)
+            
         elif x > deadzone_rx and x < correct_rx:
-            destra(0.05, 0x61A8)
-            stop()
-        elif x > correct_rx:
-            destra(0.1, 0x61A8)
-            stop()
-        elif x < correct_sx:
-            sinistra(0.1, 0x61A8)
-            stop()
+            destra(0.05, 0.6)
 
+        elif x > correct_rx:
+            destra(0.1, 0.6)
+            
+        elif x < correct_sx:
+            sinistra(0.1, 0.6)
+            
         # if the width of the rectangle is greater than 110 it means that the face is too close to the robot, vice versa if it's lower than 52
         if w > 110:
-            indietro(0.09, 0x61A8)
-            stop()
+            indietro(0.09, 0.6)
+            
         elif w < 52:
-            avanti(0.09, 0x61A8)
-            stop()
+            avanti(0.09, 0.6)
 
         break
 

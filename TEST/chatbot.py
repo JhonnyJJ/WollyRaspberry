@@ -35,8 +35,9 @@ responses = {
 }
 
 def playsound(filepath):
-    song = AudioSegment.from_mp3(filepath)
-    play(song)
+    mixer.init()
+    mixer.music.load(filepath)
+    mixer.music.play()
 
 def textSpeech(text):
     # print('parlo')
@@ -118,7 +119,6 @@ run = True
 background()
 
 while run:
-    print("example of tracking running")
     for _ in range(50): time.sleep(0.1)
 
 print("stop recording")
