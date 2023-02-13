@@ -1,11 +1,10 @@
 import time
 import cv2
 import random
-import pygame
+from pygame import mixer
 import speech_recognition as sr
 from gtts import gTTS
-from pydub import AudioSegment
-from pydub.playback import play
+
 
 global numFaces
 global i
@@ -117,7 +116,6 @@ def background():
 
 run = True
 background()
-
 while run:
     for _ in range(50): time.sleep(0.1)
 

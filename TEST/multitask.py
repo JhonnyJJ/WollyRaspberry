@@ -22,9 +22,10 @@ err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace
 
 # not understood phrases
 notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scusa non ho capito potresti ripetere?",
-          "non riesco a sentirti!"]
+            "non riesco a sentirti!"]
 
-noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!", "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
+noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
+              "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
 
 goodbye = ["nulla", "niente", "lascia stare"]
 
@@ -33,6 +34,7 @@ responses = {
     "come stai": "bene grazie!",
     "buona giornata": "grazie anche a te!"
 }
+
 
 def playsound(filepath):
     mixer.init()
@@ -59,10 +61,9 @@ def chatbot(text):
         print(random.choice(err))
         textSpeech(random.choice(err))
 
-
 def awake():
     global stop_listening
-    stop_listening(wait_for_stop= False)
+    stop_listening(wait_for_stop=False)
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source, 2)
         try:
@@ -90,7 +91,7 @@ def callback(recognizer, audio):
     try:
         print("listen")
         text = recognizer.recognize_google(audio, language="IT-IT")
-        #wake word
+        # wake word
         if text.lower() in wword:
             textSpeech(random.choice(saluto) + ", dimmi pure")
             # value to keep track of how many tries the bot needs to ask
@@ -102,6 +103,7 @@ def callback(recognizer, audio):
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
+
 def background():
     global r
     global m
@@ -109,98 +111,62 @@ def background():
     m = sr.Microphone()
 
     with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source,2)
+        r.adjust_for_ambient_noise(source, 2)
 
     print("listen background")
     global stop_listening
     stop_listening = r.listen_in_background(m, callback)
 
 
-numFaces=0
+# Inizializza il riconoscimento del microfono
+r = sr.Recognizer()
+mic = sr.Microphone()
 
-# cascade classifier for face tracking
+# Carica il classificatore per il rilevamento del viso
 face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
 
-# inizializing camera capture
+# Avvia la webcam
 cap = cv2.VideoCapture(0)
 cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320);
 cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200);
 time.sleep(1)
 
-# Check if the webcam is opened correctly
-if not cap.isOpened():
-    raise IOError("Cannot open webcam")
-
-background()
 while True:
-    
-    # capture frame by frame
+    # Leggi un frame dalla webcam
     ret, frame = cap.read()
 
     if ret == False:
         print("error getting image")
         continue
 
-    # gray scaling for easier detection
+    # Converti il frame in scala di grigio
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-    gray = cv2.equalizeHist(gray)
 
-    # face detection for each frame
-    faces = face_cascade.detectMultiScale(frame, 1.1, 3, 0, (10, 10))
+    # Rileva i volti nel frame
+    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
 
-    # if the number of faces is greater than the number of faces already recognised Wolly will introduce himself again
-    if 0 < len(faces) != numFaces:
-        if len(faces) > numFaces:
-            print("TTS", len(faces), numFaces)
-            textSpeech("Ciao sono Wolly!")
-            numFaces = len(faces)
-        print(len(faces), numFaces)
-
-    print("Found " + str(len(faces)) + " face(s)")
-
-    # create a green rectangle around the found faces
+    # Disegna un rettangolo intorno ai volti rilevati
     for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
+        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
 
-        # start tracking
-        # values of the frame to find the center on the x axis of the frame
-        FRAME_W = 320
 
-        # centre of the face (only x axis because it hasn't any motor on the y axis)
-        x = x + (w / 2)
+    # Ascolta per il discorso
+    with mic as source:
+        audio = r.listen(source)
 
-        # coordinates on the right side, of the robot while facing you, is greater then left side (any future right or left will be referred to the robot)
-        # we take the half of the frame wight and add 80 frames of "dead zone" (40 on each side) so the robot isn't constantly moving
-        deadzone_rx = (FRAME_W / 2) + 40
-        deadzone_sx = (FRAME_W / 2) - 40
+    try:
+        # Riconosci il discorso
+        speech = r.recognize_google(audio, language="it-IT")
+        print("Hai detto: " + speech)
+    except sr.UnknownValueError:
+        print("Non ho capito")
+    except sr.RequestError as e:
+        print("Errore durante il riconoscimento: {0}".format(e))
 
-        # we create a border to make bigger adjustments so the robot can keep up with the face
-        correct_rx = (FRAME_W / 2) + 70
-        correct_sx = (FRAME_W / 2) - 70
-
-        # if the face coordinate is < of the left border the robot needs to be moving left
-        # if the face coordinate is > of the right border the robot needs to be moving right
-        if x < deadzone_sx and x > correct_sx:
-            sinistra(0.05, 0.6)
-            
-        elif x > deadzone_rx and x < correct_rx:
-            destra(0.05, 0.6)
-
-        elif x > correct_rx:
-            destra(0.1, 0.6)
-            
-        elif x < correct_sx:
-            sinistra(0.1, 0.6)
-            
-        # if the width of the rectangle is greater than 110 it means that the face is too close to the robot, vice versa if it's lower than 52
-        if w > 110:
-            indietro(0.09, 0.6)
-            
-        elif w < 52:
-            avanti(0.09, 0.6)
-
+    # Se viene premuto il tasto "q", esci dal ciclo
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
+# Rilascia la webcam e distruggi le finestre
 cap.release()
-print("stop recording")
-stop_listening(wait_for_stop=False)
+cv2.destroyAllWindows()
