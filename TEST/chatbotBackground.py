@@ -1,12 +1,10 @@
 import time
-import cv2
 import random
 import pygame
+from pygame import mixer
 import speech_recognition as sr
 from gtts import gTTS
-from pygame import mixer
 
-from motorsNew import avanti, indietro, destra, sinistra
 
 global numFaces
 global i
@@ -23,10 +21,9 @@ err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace
 
 # not understood phrases
 notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scusa non ho capito potresti ripetere?",
-            "non riesco a sentirti!"]
+          "non riesco a sentirti!"]
 
-noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
-              "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
+noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!", "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
 
 goodbye = ["nulla", "niente", "lascia stare"]
 
@@ -35,7 +32,6 @@ responses = {
     "come stai": "bene grazie!",
     "buona giornata": "grazie anche a te!"
 }
-
 
 def playsound(filepath):
     mixer.init()
@@ -64,7 +60,9 @@ def chatbot(text):
         print(random.choice(err))
         textSpeech(random.choice(err))
 
+
 def awake():
+    stop_listening(wait_for_stop=False)
     while True:
         r = sr.Recognizer()
 
@@ -79,6 +77,7 @@ def awake():
             response = r.recognize_google(audio, language="IT-IT")
             print(response)
             chatbot(response)
+            background()
             return
         except sr.UnknownValueError:
             global i
@@ -88,14 +87,14 @@ def awake():
                 textSpeech(random.choice(notundst))
             else:
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
+                background()
                 break
 
 
 def callback(recognizer, audio):
     try:
-        print("listen")
         text = recognizer.recognize_google(audio, language="IT-IT")
-        # wake word
+        #wake word
         if text.lower() in wword:
             textSpeech(random.choice(saluto) + ", dimmi pure")
             # value to keep track of how many tries the bot needs to ask
@@ -107,56 +106,26 @@ def callback(recognizer, audio):
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
+def background():
+    global r
+    r = sr.Recognizer()
 
-# Inizializza il riconoscimento del microfono
-r = sr.Recognizer()
-mic = sr.Microphone()
+    with sr.Microphone() as source:
+        r.adjust_for_ambient_noise(source,2)
 
-# Carica il classificatore per il rilevamento del viso
-face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
+    print("listen background")
+    global stop_listening
+    stop_listening = r.listen_in_background(sr.Microphone(), callback)
 
-# Avvia la webcam
-cap = cv2.VideoCapture(0)
-cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320);
-cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200);
-time.sleep(1)
+def main():
+    run = True
+    background()
+    while run:
+        for _ in range(50):
+            time.sleep(0.1)
 
-while True:
-    # Leggi un frame dalla webcam
-    ret, frame = cap.read()
+    print("stop recording")
+    stop_listening(wait_for_stop=False)
 
-    if ret == False:
-        print("error getting image")
-        continue
-
-    # Converti il frame in scala di grigio
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Rileva i volti nel frame
-    faces = face_cascade.detectMultiScale(gray, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
-
-    # Disegna un rettangolo intorno ai volti rilevati
-    for (x, y, w, h) in faces:
-        cv2.rectangle(frame, (x, y), (x + w, y + h), (255, 0, 0), 2)
-
-
-    # Ascolta per il discorso
-    with mic as source:
-        audio = r.listen(source)
-
-    try:
-        # Riconosci il discorso
-        speech = r.recognize_google(audio, language="it-IT")
-        print("Hai detto: " + speech)
-    except sr.UnknownValueError:
-        print("Non ho capito")
-    except sr.RequestError as e:
-        print("Errore durante il riconoscimento: {0}".format(e))
-
-    # Se viene premuto il tasto "q", esci dal ciclo
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
-
-# Rilascia la webcam e distruggi le finestre
-cap.release()
-cv2.destroyAllWindows()
+if __name__ == '__main__':
+    main()

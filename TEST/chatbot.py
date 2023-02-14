@@ -1,10 +1,9 @@
 import time
-import cv2
 import random
+import pygame
 from pygame import mixer
 import speech_recognition as sr
 from gtts import gTTS
-
 
 global numFaces
 global i
@@ -21,9 +20,10 @@ err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace
 
 # not understood phrases
 notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scusa non ho capito potresti ripetere?",
-          "non riesco a sentirti!"]
+            "non riesco a sentirti!"]
 
-noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!", "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
+noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
+              "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
 
 goodbye = ["nulla", "niente", "lascia stare"]
 
@@ -37,9 +37,11 @@ def playsound(filepath):
     mixer.init()
     mixer.music.load(filepath)
     mixer.music.play()
+    while mixer.music.get_busy():
+        time.sleep(0.1)
+    pygame.quit()   #windows debug
 
 def textSpeech(text):
-    # print('parlo')
     tts = gTTS(text=text, lang='it')
     tts.save("tts.mp3")
     playsound("tts.mp3")
@@ -60,64 +62,55 @@ def chatbot(text):
 
 
 def awake():
-    global stop_listening
-    stop_listening(wait_for_stop= False)
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source, 2)
-        try:
+    while True:
+        r = sr.Recognizer()
+
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, 2)
             # add sound to help to know when to talk
             playsound("hearing.mp3")
-            microphone = r.listen(source)
-            response = r.recognize_google(microphone, language="IT-IT")
+            print("ascolto")
+            audio = r.listen(source)
+
+        try:
+            response = r.recognize_google(audio, language="IT-IT")
             print(response)
             chatbot(response)
-            background()
+            return
         except sr.UnknownValueError:
             global i
-            i += 1
-            if i <= 2:
+            i = i-1
+            if i != 0:
                 print("non ho capito, puoi ripetere?")
                 textSpeech(random.choice(notundst))
-                awake()
             else:
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
-                background()
-                return
+                break
 
 
-def callback(recognizer, audio):
-    try:
-        text = recognizer.recognize_google(audio, language="IT-IT")
-        #wake word
-        if text.lower() in wword:
-            textSpeech(random.choice(saluto) + ", dimmi pure")
-            # value to keep track of how many tries the bot needs to ask
-            global i
-            i = 0
-            awake()
-    except sr.UnknownValueError:
-        print("Could not understand audio")
-    except sr.RequestError as e:
-        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+def main():
+    while True:
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source,1)
+            print("ascolto")
+            audio = r.listen(source)
 
-def background():
-    global r
-    global m
-    r = sr.Recognizer()
-    m = sr.Microphone()
+        try:
+            text = r.recognize_google(audio, language="IT-IT")
 
-    with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source,2)
+            if text.lower() in wword:
+                textSpeech(random.choice(saluto) + ", dimmi pure")
 
-    print("listen background")
-    global stop_listening
-    stop_listening = r.listen_in_background(m, callback)
+                # value to keep track of how many tries the bot needs to ask
+                global i
+                i = 2
+                awake()
+        except sr.UnknownValueError:
+            print("Non ho capito")
+        except sr.RequestError as e:
+            print("Errore durante il riconoscimento: {0}".format(e))
 
 
-run = True
-background()
-while run:
-    for _ in range(50): time.sleep(0.1)
-
-print("stop recording")
-stop_listening(wait_for_stop=False)
+if __name__ == '__main__':
+    main()

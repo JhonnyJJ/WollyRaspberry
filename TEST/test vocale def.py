@@ -1,28 +1,32 @@
 import cv2
+import time
+import pygame
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
 
-run = True
+def playsound(filepath):
+    mixer.init()
+    mixer.music.load(filepath)
+    mixer.music.play()
+    while mixer.music.get_busy():
+        time.sleep(0.1)
+    #pygame.quit()   #windows debug
 
 def textSpeech(text):
-    mixer.init()
-    print('parlo')
-    print("dico " + text)
     tts = gTTS(text=text, lang='it')
-    tts.save('tts.mp3')
-    mixer.music.load('tts.mp3')
-    mixer.music.play()
+    tts.save("tts.mp3")
+    playsound("tts.mp3")
     
-while run:
+while True:
+    recognizer = sr.Recognizer()
     with sr.Microphone() as source:
-        recognizer = sr. Recognizer()
         recognizer.adjust_for_ambient_noise(source)
         recognizer.dynamic_energy_threshold = 3000
+        print("ascolto")
+        audio = recognizer.listen(source, timeout=5.0)
 
         try:
-            print("ascolto")
-            audio = recognizer.listen(source, timeout=5.0)
             response = recognizer.recognize_google(audio, language="IT-IT")
             print(response)
             textSpeech(response)

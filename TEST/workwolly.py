@@ -79,10 +79,8 @@ def awake():
             if i <= 2:
                 print("non ho capito, puoi ripetere?")
                 textSpeech(random.choice(notundst))
-                awake()
             else:
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
-                background()
                 return
 
 
@@ -106,7 +104,6 @@ def background():
     global r
     global m
     r = sr.Recognizer()
-    m = sr.Microphone()
 
     with sr.Microphone() as source:
         r.adjust_for_ambient_noise(source,2)
