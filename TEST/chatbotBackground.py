@@ -78,7 +78,7 @@ def awake():
             print(response)
             chatbot(response)
             background()
-            return
+            break
         except sr.UnknownValueError:
             global i
             i = i-1
@@ -93,6 +93,7 @@ def awake():
 
 def callback(recognizer, audio):
     try:
+        print("ascolto in back")
         text = recognizer.recognize_google(audio, language="IT-IT")
         #wake word
         if text.lower() in wword:
@@ -111,7 +112,7 @@ def background():
     r = sr.Recognizer()
 
     with sr.Microphone() as source:
-        r.adjust_for_ambient_noise(source,2)
+        r.adjust_for_ambient_noise(source)
 
     print("listen background")
     global stop_listening
@@ -122,8 +123,9 @@ def main():
     background()
     while run:
         for _ in range(50):
-            time.sleep(0.1)
-
+            time.sleep(0.5)
+            print("programma")
+            
     print("stop recording")
     stop_listening(wait_for_stop=False)
 

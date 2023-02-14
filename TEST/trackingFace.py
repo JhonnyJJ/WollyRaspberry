@@ -7,6 +7,20 @@ from motorsNew import avanti, indietro, destra, sinistra
 
 global numFaces
 
+
+def playsound(filepath):
+    mixer.init()
+    mixer.music.load(filepath)
+    mixer.music.play()
+    while mixer.music.get_busy():
+        time.sleep(0.05)
+    #pygame.quit()   #windows debug
+
+def textSpeech(text):
+    tts = gTTS(text=text, lang='it')
+    tts.save("tts.mp3")
+    playsound("tts.mp3")
+
 def main():
     numFaces = 0
     # cascade classifier for face tracking
@@ -43,7 +57,7 @@ def main():
         if 0 < len(faces) != numFaces:
             if len(faces) > numFaces:
                 print("TTS", len(faces), numFaces)
-                textSpeech()
+                textSpeech("ciao sono wolly")
                 numFaces = len(faces)
             print(len(faces), numFaces)
 

@@ -79,7 +79,7 @@ def awake():
             response = r.recognize_google(audio, language="IT-IT")
             print(response)
             chatbot(response)
-            return
+            break
         except sr.UnknownValueError:
             global i
             i = i-1
@@ -142,7 +142,8 @@ while True:
 
     # Ascolta per il discorso
     with mic as source:
-        audio = r.listen(source)
+        print("ascolto")
+        audio = r.listen(source,timeout=5)
 
     try:
         # Riconosci il discorso

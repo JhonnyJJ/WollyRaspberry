@@ -38,14 +38,16 @@ def playsound(filepath):
     mixer.music.load(filepath)
     mixer.music.play()
     while mixer.music.get_busy():
-        time.sleep(0.1)
-    pygame.quit()   #windows debug
+        time.sleep(0.05)
+    #pygame.quit()   #windows debug
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
     tts.save("tts.mp3")
     playsound("tts.mp3")
 
+
+#hardcoded chatbot
 def chatbot(text):
     user_response = text.lower()
 
@@ -66,7 +68,7 @@ def awake():
         r = sr.Recognizer()
 
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, 2)
+            r.adjust_for_ambient_noise(source, 1)
             # add sound to help to know when to talk
             playsound("hearing.mp3")
             print("ascolto")
@@ -76,7 +78,7 @@ def awake():
             response = r.recognize_google(audio, language="IT-IT")
             print(response)
             chatbot(response)
-            return
+            break
         except sr.UnknownValueError:
             global i
             i = i-1
@@ -92,7 +94,7 @@ def main():
     while True:
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source,1)
+            r.adjust_for_ambient_noise(source,2)
             print("ascolto")
             audio = r.listen(source)
 

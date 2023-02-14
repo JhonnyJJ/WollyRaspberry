@@ -12,8 +12,8 @@ if __name__ == '__main__':
     chat = multiprocessing.Process(target=chatting())
     track = multiprocessing.Process(target=tracking())
 
-chat.start()
 track.start()
+chat.start()
 
-chat.join()
 track.join()
+chat.join()
