@@ -77,7 +77,6 @@ def awake():
             response = r.recognize_google(audio, language="IT-IT")
             print(response)
             chatbot(response)
-            background()
             break
         except sr.UnknownValueError:
             global i
@@ -87,7 +86,6 @@ def awake():
                 textSpeech(random.choice(notundst))
             else:
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
-                background()
                 break
 
 
@@ -107,8 +105,7 @@ def callback(recognizer, audio):
     except sr.RequestError as e:
         print("Could not request results from Google Speech Recognition service; {0}".format(e))
 
-def background():
-    global r
+def main():
     r = sr.Recognizer()
 
     with sr.Microphone() as source:
@@ -118,10 +115,7 @@ def background():
     global stop_listening
     stop_listening = r.listen_in_background(sr.Microphone(), callback)
 
-def main():
-    run = True
-    background()
-    while run:
+    while True:
         for _ in range(50):
             time.sleep(0.5)
             print("programma")
