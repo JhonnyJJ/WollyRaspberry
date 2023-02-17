@@ -14,12 +14,14 @@ def playsound(filepath):
     mixer.music.play()
     while mixer.music.get_busy():
         time.sleep(0.05)
-    #pygame.quit()   #windows debug
+    # pygame.quit()   #windows debug
+
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
     tts.save("tts.mp3")
     playsound("tts.mp3")
+
 
 def main():
     numFaces = 0
@@ -118,7 +120,8 @@ def main():
             break
 
     cap.release()
-    #cv2.destroyAllWindows()
+    # cv2.destroyAllWindows()
+
 
 if __name__ == '__main__':
     main()
