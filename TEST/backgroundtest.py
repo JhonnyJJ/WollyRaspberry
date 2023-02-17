@@ -32,6 +32,21 @@ responses = {
     "buona giornata": "grazie anche a te!"
 }
 
+def playsound(filepath):
+    print("faccio rumore")
+    mixer.init()
+    mixer.music.load(filepath)
+    mixer.music.play()
+    while mixer.music.get_busy():
+        time.sleep(0.05)
+    # pygame.quit()   #windows debug
+
+
+def textSpeech(text):
+    tts = gTTS(text=text, lang='it')
+    tts.save("tts.mp3")
+    playsound("tts.mp3")
+
 
 def chatbot(text):
     user_response = text.lower()
@@ -46,6 +61,8 @@ def chatbot(text):
     else:
         print(random.choice(err))
         textSpeech(random.choice(err))
+        
+        
 def awake():
     while True:
         r = sr.Recognizer()
@@ -78,7 +95,7 @@ def recognize_speech():
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source, 2)
             print("ascolto")
-            audio = r.listen(source)
+            audio = r.listen(source, phrase_time_limit=5, timeout=None)
 
         try:
             text = r.recognize_google(audio, language="IT-IT")
@@ -94,20 +111,6 @@ def recognize_speech():
             print("Non ho capito")
         except sr.RequestError as e:
             print("Errore durante il riconoscimento: {0}".format(e))
-
-def playsound(filepath):
-    mixer.init()
-    mixer.music.load(filepath)
-    mixer.music.play()
-    while mixer.music.get_busy():
-        time.sleep(0.05)
-    # pygame.quit()   #windows debug
-
-
-def textSpeech(text):
-    tts = gTTS(text=text, lang='it')
-    tts.save("tts.mp3")
-    playsound("tts.mp3")
 
 
 def main():
@@ -215,4 +218,7 @@ if __name__ == '__main__':
     process2 = multiprocessing.Process(target=main)
     process1.start()
     process2.start()
+    process1.join()
+    process2.join()
+    
 
