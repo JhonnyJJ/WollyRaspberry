@@ -5,8 +5,6 @@ from pygame import mixer
 
 from motorsNew import avanti, indietro, destra, sinistra
 
-global numFaces
-
 
 def playsound(filepath):
     mixer.init()
