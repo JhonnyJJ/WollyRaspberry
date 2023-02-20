@@ -8,8 +8,7 @@ from gtts import gTTS
 global numFaces
 global i
 
-# wake words
-wword = ["hey wally", "ciao wally", "ok wally"]
+# ARRAYS FOR WOLLY
 
 saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
 
@@ -24,6 +23,8 @@ notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scus
 
 noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
               "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
+
+# HUMAN INPUTS
 
 goodbye = ["nulla", "niente", "lascia stare"]
 
@@ -51,9 +52,17 @@ def textSpeech(text):
 def chatbot(text):
     user_response = text.lower()
 
-    if user_response in goodbye:
-        textSpeech(random.choice(goodbye) + "resto in ascolto")
-        return
+    for word in goodbye:
+        if word in user_response:
+            print(random.choice(goodbye) + " resto in ascolto")
+            textSpeech(random.choice(
+                goodbye) + " resto in ascolto")  # al posto di goodbye aggiungere un array di possibili risposte
+            return
+
+    for key in responses.keys():
+        if key in user_response:
+            print(responses[key])
+            textSpeech(responses[key])
 
     if user_response in responses:
         print("Wolly: " + responses[user_response])
@@ -63,7 +72,8 @@ def chatbot(text):
         textSpeech(random.choice(err))
 
 
-def awake():
+# each time you need to use microphone to get recognized speech as a string
+def talk():
     while True:
         r = sr.Recognizer()
 
@@ -77,8 +87,8 @@ def awake():
         try:
             response = r.recognize_google(audio, language="IT-IT")
             print(response)
-            chatbot(response)
-            break
+            return response
+
         except sr.UnknownValueError:
             global i
             i = i-1
@@ -87,7 +97,7 @@ def awake():
                 textSpeech(random.choice(notundst))
             else:
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
-                break
+                return None
 
 
 def main():
@@ -96,18 +106,21 @@ def main():
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source,2)
             print("ascolto")
-            audio = r.listen(source)
+            audio = r.listen(source, phrase_time_limit=5, timeout=None)
 
         try:
             text = r.recognize_google(audio, language="IT-IT")
 
-            if text.lower() in wword:
+            if "hey wally" or "ciao wally" or "ok wally" in text.lower():
                 textSpeech(random.choice(saluto) + ", dimmi pure")
 
                 # value to keep track of how many tries the bot needs to ask
                 global i
                 i = 2
-                awake()
+                response = talk()
+                if response is not None:
+                    chatbot(response)
+
         except sr.UnknownValueError:
             print("Non ho capito")
         except sr.RequestError as e:

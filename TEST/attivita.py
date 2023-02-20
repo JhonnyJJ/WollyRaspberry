@@ -32,24 +32,7 @@ def textSpeech(text):
 
 def main():
     textSpeech("daje roma daje, questa è la spiegazione dell'attività che faremo oggi")
-
-    # if you want to use microphone or else
-
-    # while True:
-    #     r = sr.Recognizer()
-    #
-    #     with sr.Microphone() as source:
-    #         r.adjust_for_ambient_noise(source, 1)
-    #         # add sound to help to know when to talk
-    #         playsound("hearing.mp3")
-    #         print("ascolto")
-    #         audio = r.listen(source)
-    #
-    #     try:
-    #         response = r.recognize_google(audio, language="IT-IT")
-    #         print(response)
-    #     except sr.UnknownValueError:
-    #         textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
+    # simil execjson del vecchio wolly
 
 
 

@@ -113,7 +113,7 @@ def recognize_speech():
             print("Errore durante il riconoscimento: {0}".format(e))
 
 
-def main():
+def track():
     numFaces = 0
     # cascade classifier for face tracking
     face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
@@ -215,7 +215,7 @@ def main():
 
 if __name__ == '__main__':
     process1 = multiprocessing.Process(target=recognize_speech)
-    process2 = multiprocessing.Process(target=main)
+    process2 = multiprocessing.Process(target=track)
     process1.start()
     process2.start()
     process1.join()

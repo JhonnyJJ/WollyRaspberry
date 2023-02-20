@@ -3,8 +3,8 @@ from adafruit_motorkit import MotorKit
 # Waveshare Motor Driver Hat 0x40
 kit = MotorKit(0x40)
 
-#speed is a value from 0.5(it should be 0 but probably it's not enough energy to power the motors) to 1.0, where 1.0 is full throttle and 0.5 is power off
-#duration is a value in seconds and is used to indicate for how much time the motor execute the movement
+# speed is a value from 0.5(it should be 0 but probably it's not enough energy to power the motors) to 1.0, where 1.0 is full throttle and 0.5 is power off
+# duration is a value in seconds and is used to indicate for how much time the motor execute the movement
 
 def avanti(duration, speed): 
     kit.motor1.throttle = speed
