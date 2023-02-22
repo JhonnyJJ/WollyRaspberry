@@ -40,13 +40,15 @@ responses = {
 ok = [r"\bok\b", r"\bsi\b", r"\bva bene\b", r"\bcerto\b"] # r vale a dire la stringa raw, \b...\b invece è la parola singola
 
 
+
 def playsound(filepath):
     mixer.init()
     mixer.music.load(filepath)
     mixer.music.play()
     while mixer.music.get_busy():
         time.sleep(0.05)
-    #pygame.quit()   #windows debug
+    # pygame.quit()   #windows debug
+
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
@@ -54,7 +56,7 @@ def textSpeech(text):
     playsound("tts.mp3")
 
 
-#hardcoded chatbot
+# hardcoded chatbot AGGIUNGERE QUALCHE TIPO DI FACCIA CON DOMANDE O EMOZIONI
 def chatbot(text):
     user_response = text.lower()
 
@@ -105,8 +107,7 @@ def talk():
             return response
 
         except sr.UnknownValueError:
-            global i
-            i = i-1
+            i = i - 1
             if i != 0:
                 print("non ho capito, puoi ripetere?")
                 textSpeech(random.choice(notundst))
@@ -119,7 +120,7 @@ def main():
     while True:
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source,2)
+            r.adjust_for_ambient_noise(source, 2)
             print("ascolto")
             audio = r.listen(source, phrase_time_limit=3, timeout=None)
 
