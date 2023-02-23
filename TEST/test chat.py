@@ -2,7 +2,6 @@ import time
 import random
 import re
 
-
 # ARRAYS FOR WOLLY
 
 saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
@@ -10,6 +9,9 @@ saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
 addio = ["come desideri", "nessun problema", "va bene"]
 
 posso = ["vuoi che ti dica quello che so fare?", "vuoi sentire cosa so fare?", "sei curioso di sapere cosa so fare?"]
+
+curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
+             "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!"]
 
 # error phrases
 err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa",
@@ -33,33 +35,41 @@ responses = {
     "heila": "heila ciao, "
 }
 
-ok = [r"\bok\b", r"\bsi\b", r"\bva bene\b", r"\bcerto\b"] # r vale a dire la stringa raw, \b...\b invece è la parola singola
+ok = [r"\bok\b", r"\bsi\b", r"\bva bene\b",
+      r"\bcerto\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola
 
 
-def chatbot(text):
-    user_response = text.lower()
+def chatbot(response): # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
 
     # stop immediately
     for word in goodbye:
-        if word in user_response:
+        if word in response:
             print(random.choice(addio) + " resto in ascolto")
             return
 
     for key in responses.keys():
-        if key in user_response:
+        if key in response:
             print(responses[key] + random.choice(posso))
             response = input()
-            if response is None:
+            if response is False:
                 return
             elif re.search(r"\bno\b", response):
-                print("che vuoi brutto scemo")
-                return
-            for word in ok:
-                if re.search(word, response):
-                    print("BRAVOOOOOOOo")
+                print("Va bene, nessun problema! allora vorresti sapere una piccola curiosità su di me?")
+                response = input()
+                if response is False: # controllo si o no per curiosità wolly
                     return
-
-    print(random.choice(err))
+                elif re.search(r"\bno\b", response): # no curiosità wolly
+                    print("ok nessun problema, magari posso incuriosirti con un fatto assurdo?") # Continuare si o no
+                    return
+                for word in ok:
+                    if re.search(word, response): # curiosità su wolly
+                        print(random.choice(curiosita))
+                        print("CONTINUARE IL DISCORSO")
+                        return
+            for word in ok:
+                if re.search(word, response): # parla di quello che sa fare wolly
+                    print("So urlare bestemmie")
+                    return
 
 
 def main():
@@ -67,6 +77,7 @@ def main():
         print("vada vada")
         response = input()
         chatbot(response)
+
 
 if __name__ == '__main__':
     main()

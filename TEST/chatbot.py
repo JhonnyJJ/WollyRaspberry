@@ -6,7 +6,6 @@ from pygame import mixer
 import speech_recognition as sr
 from gtts import gTTS
 
-
 # ARRAYS FOR WOLLY
 
 saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
@@ -14,6 +13,9 @@ saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
 addio = ["come desideri", "nessun problema", "va bene"]
 
 posso = ["vuoi che ti dica quello che so fare?", "vuoi sentire cosa so fare?", "sei curioso di sapere cosa so fare?"]
+
+curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
+             "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!"]
 
 # error phrases
 err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa",
@@ -37,8 +39,8 @@ responses = {
     "heila": "heila ciao, "
 }
 
-ok = [r"\bok\b", r"\bsi\b", r"\bva bene\b", r"\bcerto\b"] # r vale a dire la stringa raw, \b...\b invece è la parola singola
-
+ok = [r"\bok\b", r"\bsi\b", r"\bva bene\b",
+      r"\bcerto\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
 
 
 def playsound(filepath):
@@ -57,37 +59,47 @@ def textSpeech(text):
 
 
 # hardcoded chatbot AGGIUNGERE QUALCHE TIPO DI FACCIA CON DOMANDE O EMOZIONI
-def chatbot(text):
-    user_response = text.lower()
+def chatbot(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
 
     # stop immediately
     for word in goodbye:
-        if word in user_response:
+        if word in response:
             print(random.choice(addio) + " resto in ascolto")
             textSpeech(random.choice(addio) + " resto in ascolto")
             return
 
     for key in responses.keys():
-        if key in user_response:
+        if key in response:
             print(responses[key] + random.choice(posso))
             textSpeech(responses[key] + random.choice(posso))
             response = talk()
-            if response is None:
+            if response is False:
                 return
             elif re.search(r"\bno\b", response):
-                print("che vuoi brutto scemo")
-                return
-            for word in ok:
-                if re.search(word, response):
-                    print("BRAVOOOOOOOo")
+                print("Va bene, nessun problema! allora vorresti sapere una piccola curiosità su di me?")
+                textSpeech("Va bene, nessun problema! allora vorresti sapere una piccola curiosità su di me?")
+                response = talk()
+                if response is False:  # controllo si o no per curiosità wolly
                     return
-
-    print(random.choice(err))
+                elif re.search(r"\bno\b", response):  # no curiosità wolly
+                    print("ok nessun problema, magari posso incuriosirti con un fatto assurdo?")  # Continuare si o no
+                    textSpeech("ok nessun problema, magari posso incuriosirti con un fatto assurdo?")
+                    return
+                for word in ok:
+                    if re.search(word, response):  # curiosità su wolly
+                        print(random.choice(curiosita))
+                        textSpeech(random.choice(curiosita))
+                        print("CONTINUARE IL DISCORSO")
+                        return
+            for word in ok:
+                if re.search(word, response):  # parla di quello che sa fare wolly
+                    print("So urlare bestemmie")
+                    textSpeech("iabadabadu")
+                    return
 
 
 # each time you need to use microphone to get recognized speech as a string
 def talk():
-
     # value to keep track of how many tries the bot needs to ask
     i = 2
 
@@ -104,7 +116,7 @@ def talk():
         try:
             response = r.recognize_google(audio, language="IT-IT")
             print(response)
-            return response
+            return response.lower()
 
         except sr.UnknownValueError:
             i = i - 1
@@ -112,8 +124,9 @@ def talk():
                 print("non ho capito, puoi ripetere?")
                 textSpeech(random.choice(notundst))
             else:
+                print("non riesco a capirti! vado a ricalibrare il mio microfono!")
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
-                return None
+                return False
 
 
 def main():
@@ -131,13 +144,13 @@ def main():
                 textSpeech(random.choice(saluto) + ", dimmi pure")
 
                 response = talk()
-                if response is not None:
+                if response is not False:
                     chatbot(response)
 
         except sr.UnknownValueError:
             print("Non ho capito")
         except sr.RequestError as e:
-            print("Errore durante il riconoscimento: {0}".format(e))
+            print("Errore con il collegamento API: {0}".format(e))
 
 
 if __name__ == '__main__':
