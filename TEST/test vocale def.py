@@ -11,7 +11,7 @@ def playsound(filepath):
     mixer.music.play()
     while mixer.music.get_busy():
         time.sleep(0.1)
-    #pygame.quit()   #windows debug
+    pygame.quit()   #windows debug
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
@@ -24,7 +24,7 @@ while True:
         recognizer.adjust_for_ambient_noise(source)
         recognizer.dynamic_energy_threshold = 3000
         print("ascolto")
-        audio = recognizer.listen(source, timeout=5.0)
+        audio = recognizer.listen(source,phrase_time_limit=4, timeout=6)
 
         try:
             response = recognizer.recognize_google(audio, language="IT-IT")
