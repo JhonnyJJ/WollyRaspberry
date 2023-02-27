@@ -1,10 +1,17 @@
 import cv2
 import time
+import random
 from gtts import gTTS
 from pygame import mixer
 
 from motorsNew import avanti, indietro, destra, sinistra
 
+ciao = ["ciao sono wolly, ", "heila ciao, io sono wolly, ", "hey ciao, mi chiamo wolly, "]
+
+ascolto = ["resto in ascolto, ", " ", "sono tutto orecchi, ", "sono a tua disposizione, ", "adesso sono in ascolto, "]
+
+quando = ["quando hai bisogno di me chiamami e ti risponderò", "se avessi bisogno di me chiamami", "se volessi sapere quello che so fare chiamami",
+          "se avessi bisogno di me chiamami"]
 
 def playsound(filepath):
     mixer.init()
@@ -57,7 +64,7 @@ def main():
         if 0 < len(faces) != numFaces:
             if len(faces) > numFaces:
                 print("TTS", len(faces), numFaces)
-                textSpeech("ciao sono wolly")
+                textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
                 numFaces = len(faces)
             print(len(faces), numFaces)
 
@@ -98,10 +105,10 @@ def main():
                 sinistra(0.1, 0.6)
 
             # if the width of the rectangle is greater than 110 it means that the face is too close to the robot, vice versa if it's lower than 52
-            if w > 110:
+            if w > 120:
                 indietro(0.09, 0.6)
 
-            elif w < 52:
+            elif w < 60:
                 avanti(0.09, 0.6)
 
             break
@@ -112,10 +119,6 @@ def main():
         # frame = cv2.resize(frame, (320,200))
         # frame = cv2.flip(frame,1)
         # cv2.imshow('Video', frame)
-
-        # input s to stop
-        if cv2.waitKey(1) & 0xFF == ord('s'):
-            break
 
     cap.release()
     # cv2.destroyAllWindows()
