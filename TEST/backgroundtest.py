@@ -4,8 +4,8 @@ import signal
 import sys
 from motorsNew import avanti, indietro, destra, sinistra
 import multiprocessing
+from chatbot import *
 from chatbot import main as recognize_speech
-from chatbot import textSpeech
 
 def track():
     numFaces = 0
