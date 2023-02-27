@@ -1,7 +1,6 @@
 import time
 import random
 import pygame
-import re
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
@@ -55,7 +54,7 @@ def playsound(filepath):
     mixer.music.play()
     while mixer.music.get_busy():
         time.sleep(0.01)
-    pygame.quit()   #windows debug
+    # pygame.quit()   #windows debug
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
