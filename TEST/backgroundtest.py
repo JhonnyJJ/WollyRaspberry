@@ -1,11 +1,10 @@
 import signal
 import sys
 import multiprocessing
-from chatbot import *
 from chatbot import main as recognize_speech
 from trackingFace import main as track
 
-def signal_handler():
+def signal_handler(sig, frame):
     print('You ended the program')
     process1.terminate()
     process2.terminate()
