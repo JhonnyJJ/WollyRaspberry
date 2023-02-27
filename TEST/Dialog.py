@@ -1,7 +1,7 @@
 import time
 import random
 import re
-from backgroundtest import textSpeech, talk, ok, err
+from chatbot import textSpeech, ok, talk, err
 
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
              "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!"]

@@ -136,7 +136,7 @@ def main():
                         chatbot(response)
 
         except sr.UnknownValueError:
-            print("Non ho capito")
+            print("---------Non ho capito---------")
         except sr.RequestError as e:
             print("Errore con il collegamento API: {0}".format(e))
 
