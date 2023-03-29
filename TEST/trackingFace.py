@@ -58,7 +58,7 @@ def main():
         gray = cv2.equalizeHist(gray)
 
         # face detection for each frame
-        faces = face_cascade.detectMultiScale(frame, 1.1, 3, 0, (10, 10))
+        faces = face_cascade.detectMultiScale(gray, 1.1, 3, 0, (10, 10))
 
         # if the number of faces is greater than the number of faces already recognised Wolly will introduce himself again
         if 0 < len(faces) != numFaces:
@@ -93,23 +93,23 @@ def main():
             # if the face coordinate is < of the left border the robot needs to be moving left
             # if the face coordinate is > of the right border the robot needs to be moving right
             if x < deadzone_sx and x > correct_sx:
-                sinistra(0.05, 0.6)
+                sinistra(0.05, 0.8)
 
             elif x > deadzone_rx and x < correct_rx:
-                destra(0.05, 0.6)
+                destra(0.05, 0.8)
 
             elif x > correct_rx:
-                destra(0.1, 0.6)
+                destra(0.1, 0.8)
 
             elif x < correct_sx:
-                sinistra(0.1, 0.6)
+                sinistra(0.1, 0.8)
 
             # if the width of the rectangle is greater than 110 it means that the face is too close to the robot, vice versa if it's lower than 52
             if w > 120:
-                indietro(0.09, 0.6)
+                indietro(0.09, 0.8)
 
             elif w < 60:
-                avanti(0.09, 0.6)
+                avanti(0.09, 0.8)
 
             break
 

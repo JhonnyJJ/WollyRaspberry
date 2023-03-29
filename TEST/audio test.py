@@ -2,13 +2,19 @@ import time
 from pygame import mixer
 from gtts import gTTS
 
-def speak(text,filename):
+def playsound(filepath):
     mixer.init()
-    print('parla')
-    tts = gTTS(text=text, lang='it')
-    tts.save(filename)
-    mixer.music.load(filename)
+    mixer.music.load(filepath)
     mixer.music.play()
+    while mixer.music.get_busy():
+        time.sleep(0.01)
+    # pygame.quit()   #windows debug
+
+def textSpeech(text):
+    tts = gTTS(text=text, lang='it')
+    tts.save("tts.mp3")
+    playsound("tts.mp3")
+
     
 run = True
 

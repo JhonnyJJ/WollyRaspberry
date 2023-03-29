@@ -26,7 +26,7 @@ def curioso(response):
     if response is False:  # controllo si o no per curiosità wolly
         return
     elif re.search(r"\bno\b", response):
-        print(random.choice(noproblem) + random.choice(fattoassurdo))  # Continuare si o no
+        print(random.choice(noproblem) + random.choice(fattoassurdo))  
         textSpeech(random.choice(noproblem) + random.choice(fattoassurdo))
         return facs(talk())
     for word in ok:

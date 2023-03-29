@@ -17,7 +17,7 @@ posso = ["vuoi che ti dica quello che so fare? ", "vuoi sentire cosa so fare? ",
 
 ecco = ["D'accordo, ecco una lista di quello che so fare!", "Va bene, ecco cosa so fare!", "so fare alcune cose simpatiche tra cui "]
 
-fare = ["So raccontare le barzellette, so capire di che umore sei, so fare calcoli difficili, so cantare o ballare e so imitare dei suoni di cose e di animali"]
+fare = ["So raccontare le barzellette, so capire di che umore sei, so fare calcoli difficili, so cantare o ballare e so imitare dei suoni di cose e di animali "]
 
 vedere = ["vorresti vedermi fare qualcosa?", "ti piacerebbe vedermi fare qualocosa?", "vuoi che faccia qualche azione?",
           "vuoi mettermi alla prova?"]
@@ -58,15 +58,13 @@ def playsound(filepath):
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
-    tts.save("tts.mp3")
-    playsound("tts.mp3")
+    tts.save("../mp3/tts.mp3")
+    playsound("../mp3/tts.mp3")
 
 # hardcoded chatbot AGGIUNGERE QUALCHE TIPO DI FACCIA CON DOMANDE O EMOZIONI
-def chatbot(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
+def chat(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
 
-    if response is False:
-        return
-    elif re.search(r"\bno\b", response):
+    if re.search(r"\bno\b", response):
         print(random.choice(noproblem) + random.choice(allora))
         textSpeech(random.choice(noproblem) + random.choice(allora))
         return curioso(talk())
@@ -82,6 +80,10 @@ def chatbot(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
             print(random.choice(noproblem) + " resto in ascolto")
             textSpeech(random.choice(noproblem) + " resto in ascolto")
             return
+    
+    print(random.choice(err) + " resto in ascolto")
+    textSpeech(random.choice(err) + " resto in ascolto")
+    return
 
 
 # each time you need to use microphone to get recognized speech as a string you call this method
@@ -96,8 +98,8 @@ def talk():
             r.adjust_for_ambient_noise(source, 1)
             # add sound to help to know when to talk
             print("ascolto")
-            playsound("hearing.mp3")
-            audio = r.listen(source, phrase_time_limit=6, timeout=None)
+            playsound("../mp3/hearing.mp3")
+            audio = r.listen(source, phrase_time_limit=4, timeout=None)
 
         try:
             response = r.recognize_google(audio, language="IT-IT")
@@ -133,7 +135,7 @@ def main():
 
                     response = talk()
                     if response is not False:
-                        chatbot(response)
+                        chat(response)
 
         except sr.UnknownValueError:
             print("---------Non ho capito---------")

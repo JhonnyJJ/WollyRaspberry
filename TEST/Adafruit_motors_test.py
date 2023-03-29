@@ -21,7 +21,7 @@ kit.motor2.throttle = 1.0
 # motors are running. After 1.0 sec., the
 # lines after sleep will set throttle to zero,
 # effectively turning the motor off.
-time.sleep(0.1)
+time.sleep(1)
 
 kit.motor1.throttle = 0
 kit.motor2.throttle = 0
