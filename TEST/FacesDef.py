@@ -18,7 +18,7 @@ height = root.winfo_screenheight()
 label = Label(root)
 label.pack()
 
-resized_image = Image.open("/home/wolly/Desktop/WollyRaspberry/img/faces/" + espressione + "/1.png").resize((width, height))
+resized_image = Image.open("/home/wolly/Desktop/WollyRaspberry/img/faces/" + espressione + "/1.png")
 imag = ImageTk.PhotoImage(resized_image)
     
 def loop():
@@ -26,9 +26,8 @@ def loop():
     DIR = "/home/wolly/Desktop/WollyRaspberry/img/faces/" + espressione + "/"
     face = [name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name)) and ".png" in name]
     lenght = len(face)
-    if x <= 33:
-        img_temp = Image.open(DIR + str(x) + ".png")
-        resized_image = img_temp.resize((width,height))
+    if x <= lenght:
+        resized_image = Image.open(DIR + str(x) + ".png")
         imag = ImageTk.PhotoImage(resized_image)
         label.configure(image=imag)
         x += 1
