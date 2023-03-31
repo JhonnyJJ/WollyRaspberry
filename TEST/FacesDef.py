@@ -26,8 +26,9 @@ def loop():
     DIR = "/home/wolly/Desktop/WollyRaspberry/img/faces/" + espressione + "/"
     face = [name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name)) and ".png" in name]
     lenght = len(face)
-    if x <= lenght:
-        resized_image = Image.open(DIR + str(x) + ".png").resize((width, height))
+    if x <= 33:
+        img_temp = Image.open(DIR + str(x) + ".png")
+        resized_image = img_temp.resize((width,height))
         imag = ImageTk.PhotoImage(resized_image)
         label.configure(image=imag)
         x += 1
