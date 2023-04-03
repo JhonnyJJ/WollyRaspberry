@@ -24,12 +24,6 @@ def face():
     #initialize a Tk structure
     root.attributes('-fullscreen', True)
 
-    #root.geometry("800x480")
-
-    # this are the dimension of the screen connected
-    width = root.winfo_screenwidth()
-    height = root.winfo_screenheight()
-
     #we create the label and then configure it with the image
 
     label = Label(root)
