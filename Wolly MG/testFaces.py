@@ -68,14 +68,17 @@ ok = [r"\bok\b", r"\bsì\b", r"\bva bene\b",
       r"\bcerto\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
 
     
+# ------------------PROCESSO 1------------------
 # permette il cambio di faccia, utilizzando espressione come globale per essere accessibile al secondo processo
 espressione = "default"
 
 def face():
-    global label, x, espressione, root
+    global label, x, espressione, root, p, frames
     time.sleep(0.3)
     root = Tk()
+    frames = 30
     x = 1
+    p = 1
     #initialize a Tk structure
     root.attributes('-fullscreen', True)
 
@@ -83,32 +86,53 @@ def face():
 
     label = Label(root)
     label.pack()
-    
     root.after(0,niamPool)
     root.mainloop()
     
+# "piccolo" è una variabile per capire se stiamo usando una variabile con meno di n "frames" (può essere scalato a piacimento)
+# "p" è il contatore per "piccolo" che si ri azzera per poter rifare il ciclo sull'animazione corta (così fa il loop dell'animazione per avere almeno n "frames" totali)
+# "piccolo" viene anche usato in niampoll per poter iniziare una nuova animazione prima, in caso sia stata fatta un'animazione breve
 def loop():
-    global espressione, x, imag
+    global espressione, x, imag, piccolo, p, frames
     DIR = "/home/wolly/Desktop/WollyRaspberry/img/faces/" + espressione + "/"
     face = [name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name)) and ".png" in name]
-    lenght = len(face)
-    print(x)
+    lunghezza = len(face)
+    print(DIR)
+    if lunghezza <= frames:
+        lenght = frames
+        piccolo = 1
+    else:
+        lenght = lunghezza
+        piccolo = 0
+    
     if x <= lenght:
-        resized_image = Image.open(DIR + str(x) + ".png")
-        imag = ImageTk.PhotoImage(resized_image)
+        if piccolo ==1:
+            if p >= lunghezza:
+                p = 1
+            resized_image = Image.open(DIR + str(p) + ".png")
+            imag = ImageTk.PhotoImage(resized_image)
+            p += 1
+        else:
+            resized_image = Image.open(DIR + str(x) + ".png")
+            imag = ImageTk.PhotoImage(resized_image)
         label.configure(image=imag)
         x += 1
         root.after(10, loop)
     else:
         x = 1
-        espressione = "default"
+        espressione = "default" 
     
 def niamPool():
+    global piccolo
     loop()
-    root.after(7000, niamPool)
+    if piccolo == 0:
+        root.after(7000, niamPool)
+    elif piccolo == 1:
+        root.after(3500, niamPool)
     
 #----------fine processo faccia--------------
 
+# ------------------PROCESSO 2------------------
 #secondo processo che usa "reface" PER CAMBIARE LA FACCIA QUANDO VUOLE
 def playsound(filepath):
     mixer.init()
@@ -192,7 +216,7 @@ def chatInit():
 
             for word in wword:
                 if re.search(word, text.lower()):
-                    reface("crazy")
+                    reface("speaker")
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
 
@@ -218,6 +242,7 @@ def change(espr):
     
 #----------fine secondo processo -----------    
 
+# ------------------PROCESSO 3------------------
 #processo 3 tiene la faccia default in sfondo
 def default():
     t = Tk()
