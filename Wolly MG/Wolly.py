@@ -1,7 +1,7 @@
 import signal
 import sys
 import multiprocessing
-from chatbot import main as recognize_speech
+from chatbot import chatInit as recognize_speech
 from trackingFace import main as track
 
 def signal_handler(sig, frame):

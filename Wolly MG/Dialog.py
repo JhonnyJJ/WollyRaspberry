@@ -1,7 +1,6 @@
-import time
 import random
 import re
-from chatbot import *
+from chatbot import allora, ok, err, saluto, goodbye
 
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
              "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!"]
@@ -19,10 +18,10 @@ realfacs = ["Masticare una chewing-gum mentre si pelano le cipolle può frenare 
             "il ketchup è nato come una medicina",
             "l'altezza della torre eiffel può variare di 15 centimetri in base alla temperatura"]
 
-
 # si: curiosità di wolly
 # no: fatti assurdi
 def curioso(response):
+    from chatbot import talk, textSpeech
     if response is False:  # controllo si o no per curiosità wolly
         return
     elif re.search(r"\bno\b", response):
@@ -57,6 +56,7 @@ def curioso(response):
 # no : stop
 # si : un'altra?
 def facs(response):
+    from chatbot import talk, textSpeech
     if response is False:
         return
     elif re.search(r"\bno\b", response):
@@ -91,11 +91,12 @@ def facs(response):
 # no: lascia chiede se vuole sentire una curiosità
 # si: chiede cosa vuole vedere
 def richiesta(response):
+    from chatbot import talk, textSpeech
     if response is False:
         return
     elif re.search(r"\bno\b", response):
-        print(random.choice(noproblem) + " resto in ascolto")
-        textSpeech(random.choice(noproblem) + " resto in ascolto")
+        print(random.choice(noproblem) + random.choice(allora))
+        textSpeech(random.choice(noproblem) + random.choice(allora))
         return curioso(talk())
     for word in ok:
         if re.search(word, response):

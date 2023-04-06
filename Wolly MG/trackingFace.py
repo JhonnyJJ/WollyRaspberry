@@ -1,8 +1,6 @@
 import cv2
 import time
 import random
-from gtts import gTTS
-from pygame import mixer
 
 from motorsNew import avanti, indietro, destra, sinistra
 
@@ -13,22 +11,9 @@ ascolto = ["resto in ascolto, ", " ", "sono tutto orecchi, ", "sono a tua dispos
 quando = ["quando hai bisogno di me chiamami e ti risponderò", "se avessi bisogno di me chiamami", "se volessi sapere quello che so fare chiamami",
           "se avessi bisogno di me chiamami"]
 
-def playsound(filepath):
-    mixer.init()
-    mixer.music.load(filepath)
-    mixer.music.play()
-    while mixer.music.get_busy():
-        time.sleep(0.05)
-    # pygame.quit()   #windows debug
-
-
-def textSpeech(text):
-    tts = gTTS(text=text, lang='it')
-    tts.save("tts.mp3")
-    playsound("tts.mp3")
-
 
 def main():
+    from chatbot import textSpeech
     numFaces = 0
     # cascade classifier for face tracking
     face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')

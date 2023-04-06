@@ -1,5 +1,4 @@
 import time
-import random
 import pygame
 import speech_recognition as sr
 from gtts import gTTS
@@ -130,7 +129,6 @@ def chatInit():
 
             for word in wword:
                 if re.search(word, text.lower()):
-                    reface("speaker")
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
 

@@ -43,14 +43,14 @@ def niamPool():
     if piccolo == 0:
         root.after(7000, niamPool)
     elif piccolo == 1:
-        root.after(3500, niamPool)
+        root.after(4000, niamPool)
         
 def main():
     global label, x, espressione, root, frames, p
     
     root = Tk()
     espressione = "speaker"
-    frames = 30
+    frames = 40
     x = 1
     p = 1
     #initialize a Tk structure
