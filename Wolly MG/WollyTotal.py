@@ -12,12 +12,15 @@ from PIL import Image, ImageTk
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
-from Dialog import *
+import re
 
 # import trackingFace
 import cv2
 import random
 from motorsNew import avanti, indietro, destra, sinistra
+
+# import frasi necessarie
+from frasi import *
 
 
 # signal handler per ctrl+c alla fine del programma
@@ -29,58 +32,9 @@ def signal_handler(sig, frame):
     process4.terminate()
     time.sleep(2)
     sys.exit(0)
+
+
 # ---------fine signal handler---------
-
-
-# wake words
-wword = ["hey wally", "ciao wally", "ok wally"]
-
-# ARRAYS FOR WOLLY
-
-saluto = ["ciao", "hey ciao!", "salve umano", "heila"]
-
-posso = ["vuoi che ti dica quello che so fare? ", "vuoi sentire cosa so fare? ", "sei curioso di sapere cosa so fare? "]
-
-ecco = ["D'accordo, ecco una lista di quello che so fare!", "Va bene, ecco cosa so fare!",
-        "so fare alcune cose simpatiche tra cui "]
-
-fare = [
-    "So raccontare le barzellette, so capire di che umore sei, so fare calcoli difficili, so cantare o ballare e so imitare dei suoni di cose e di animali "]
-
-vedere = ["vorresti vedermi fare qualcosa?", "ti piacerebbe vedermi fare qualocosa?", "vuoi che faccia qualche azione?",
-          "vuoi mettermi alla prova?"]
-
-allora = ["allora vorresti sapere una piccola curiosità su di me?",
-          "magari preferisci sentire qualche fatto curioso su di me?",
-          "che ne dici di sentire qualche informazione in più su di me?"]
-
-ciao = ["ciao sono wolly, ", "heila ciao, io sono wolly, ", "hey ciao, mi chiamo wolly, "]
-
-ascolto = ["resto in ascolto, ", " ", "sono tutto orecchi, ", "sono a tua disposizione, ", "adesso sono in ascolto, "]
-
-quando = ["quando hai bisogno di me chiamami e ti risponderò", "se avessi bisogno di me chiamami", "se volessi sapere quello che so fare chiamami",
-          "se avessi bisogno di me chiamami"]
-
-# error phrases
-err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa",
-       "faccio difficoltà a capire cosa intendi", "vorrei poterti dare una risposta ma non posso!",
-       "ora non so risponderti, quando saprò la risposta sarai la prima persona a cui lo dirò!"]
-
-# not understood phrases
-notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scusa non ho capito potresti ripetere?",
-            "non riesco a sentirti!"]
-
-noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
-              "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
-
-# HUMAN INPUTS
-
-goodbye = ["nulla", "niente", "lascia stare"]
-
-responses = ["hey ciao, ", "ciao, ", "heila ciao, "]
-
-ok = [r"\bok\b", r"\bsì\b", r"\bva bene\b",
-      r"\bcerto\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
 
 
 # ------------------PROCESSO 1------------------
@@ -147,6 +101,7 @@ def niamPool():
     elif piccolo == 1:
         root.after(4000, niamPool)
 
+
 # ----------fine processo faccia--------------
 
 # ------------------PROCESSO 2------------------
@@ -181,8 +136,8 @@ def chat(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
             return richiesta(talk())
 
     # stop immediately
-    for word in goodbye:
-        if word in response:
+    for word in niente:
+        if re.search(word, response):
             print(random.choice(noproblem) + " resto in ascolto")
             textSpeech(random.choice(noproblem) + " resto in ascolto")
             return
@@ -220,6 +175,8 @@ def talk():
             else:
                 print("non riesco a capirti! vado a ricalibrare il mio microfono!")
                 textSpeech(random.choice(noresponse) + " se hai ancora bisogno di me chiamami!")
+                reface("doubtful")
+                startTracking()
                 return False
 
 
@@ -236,6 +193,7 @@ def chatInit():
 
             for word in wword:
                 if re.search(word, text.lower()):
+                    stopTracking()
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
 
@@ -243,21 +201,25 @@ def chatInit():
                     if response is not False:
                         chat(response)
 
+
         except sr.UnknownValueError:
             print("---------Non ho capito---------")
         except sr.RequestError as e:
             print("Errore con il collegamento API: {0}".format(e))
+
 
 def reface(espr):
     global process1
     process1.terminate()
     change(espr)
 
+
 def change(espr):
     global espressione, process1
     espressione = espr
     process1 = multiprocessing.Process(target=face)
     process1.start()
+
 
 # ----------fine secondo processo -----------
 
@@ -272,6 +234,8 @@ def default():
     im = ImageTk.PhotoImage(Image.open(direct))
     label.configure(image=im)
     t.mainloop()
+
+
 # ----------fine processo 3--------------
 
 # ------------------PROCESSO 4------------------
@@ -314,6 +278,7 @@ def track():
             if len(faces) > numFaces:
                 print("TTS", len(faces), numFaces)
                 textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
+                reface("wink")
                 numFaces = len(faces)
             print(len(faces), numFaces)
 
@@ -372,14 +337,17 @@ def track():
     cap.release()
     # cv2.destroyAllWindows()
 
+
 def startTracking():
     global process4
     process4 = multiprocessing.Process(target=track)
     process4.start()
 
+
 def stopTracking():
     global process4
     process4.terminate()
+
 
 # ----------fine processo 4--------------
 

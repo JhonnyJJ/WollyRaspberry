@@ -10,11 +10,9 @@ from PIL import Image, ImageTk
 
 #import chatbot
 import random
-import pygame
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
-from Dialog import *
 
 #signal handler per ctrl+c alla fine del programma
 def signal_handler(sig, frame):

@@ -1,5 +1,4 @@
 import time
-import pygame
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
@@ -58,7 +57,7 @@ def playsound(filepath):
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
     tts.save("../mp3/tts.mp3")
-    playsound("../mp3/tts.mp3")
+    playsound("../../mp3/tts.mp3")
 
 # hardcoded chatbot AGGIUNGERE QUALCHE TIPO DI FACCIA CON DOMANDE O EMOZIONI
 def chat(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
@@ -97,7 +96,7 @@ def talk():
             r.adjust_for_ambient_noise(source, 1)
             # add sound to help to know when to talk
             print("ascolto")
-            playsound("../mp3/hearing.mp3")
+            playsound("../../mp3/hearing.mp3")
             audio = r.listen(source, phrase_time_limit=4, timeout=None)
 
         try:
