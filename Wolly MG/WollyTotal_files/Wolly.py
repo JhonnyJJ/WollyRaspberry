@@ -13,6 +13,7 @@ def signal_handler(sig, frame):
     process2.terminate()
     sys.exit(0)
 
+
 if __name__ == '__main__':
     print('Press Ctrl+C to stop the program')
     process1 = multiprocessing.Process(target=recognize_speech)

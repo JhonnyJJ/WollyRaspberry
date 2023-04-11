@@ -1,6 +1,6 @@
 import random
 import re
-from frasi import *
+from frasiDialog import *
 import time
 
 
@@ -69,6 +69,7 @@ def facs(response):
                 elif re.search(r"\bno\b", response):
                     print(random.choice(noproblem))
                     textSpeech(random.choice(noproblem) + "resto comunque in ascolto")
+                    # reface("wink")
                     return
                 for wor in ok:
                     if re.search(wor, response):
@@ -125,6 +126,7 @@ def barzelletta():
         elif re.search(r"\bno\b", response):
             print(random.choice(noproblem))
             textSpeech(random.choice(noproblem) + "resto comunque in ascolto")
+            # reface("wink")
             return
         for wor in ok:
             if re.search(wor, response):
