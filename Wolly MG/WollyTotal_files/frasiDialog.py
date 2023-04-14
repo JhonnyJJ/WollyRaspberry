@@ -13,7 +13,7 @@ ecco = ["D'accordo, ecco una lista di quello che so fare!", "Va bene, ecco cosa 
 #indovinelli da aggiungere
 fare = ["So raccontare le barzellette, so fare calcoli difficili, so cantare o ballare e so imitare dei suoni di cose e di animali "]
 
-vedere = ["vorresti vedermi fare qualcosa?", "ti piacerebbe vedermi fare qualocosa?", "vuoi che faccia qualche azione?",
+vedere = ["vorresti vedermi fare qualcosa?", "ti piacerebbe vedermi fare qualcosa?", "vuoi che faccia qualche azione?",
           "vuoi mettermi alla prova?"]
 
 allora = ["allora vorresti sapere una piccola curiosità su di me?",
@@ -44,17 +44,19 @@ noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
 responses = ["hey ciao, ", "ciao, ", "heila ciao, "]
 
 ok = [r"\bok\b", r"\bsì\b", r"\bva bene\b",
-      r"\bcerto\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
+      r"\bcerto\b", r"\bsi\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
 
 niente = [r"\bnulla\b", r"\bniente\b", r"\bnon importa\b", r"\blascia stare\b"]
 
-barze = [r"\bbattuta\b", r"\bbarzelletta\b", r"\bridere\b"]
+barze = [r"\bbattuta\b", r"\bbarzelletta\b", r"\bridere\b", r"\bbarzellette\b"]
+
+indovina = [r"\bindovinello\b", r"\bindovinelli\b", r"\brompicapo\b", r"\benigma\b"]
 
 # ------- DIALOG PHRASES -------
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
              "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!"]
 
-noproblem = ["ok nessun problema, ", "okay non importa, ", " va bene, ", "okay capisco, ", "Va bene, nessun problema! ",
+noproblem = ["ok nessun problema, ", "okay , ", " va bene, ", "okay capisco, ", "Va bene, nessun problema! ",
              "D'accordo, ", "Ho capito, ", "perfetto, "]
 
 magarifatto = ["magari posso incuriosirti con un fatto assurdo?",
@@ -70,14 +72,22 @@ realfacs = ["Masticare una chewing-gum mentre si pelano le cipolle può frenare 
 battuta = ["una mela al giorno leva il medico di torno. una cipolla al giorno leva tutti di torno",
            "Cosa si dicono le galline? ci becchiamo domani",
            "cosa si dicono due casseforti che si incontrano per strada? che combinazione",
-           "un uomo entra in un caffè. Splash!" "Che rumore fa un maiale quando cade? speck",
-           "come disse il cestino? io mi rifiuto", "come disse la calcolatrice al ragioniere? conta pure su di me",
+           "un uomo entra in un caffè. Splash!",
+           "Che rumore fa un maiale quando cade? speck",
+           "come disse il cestino? io mi rifiuto",
+           "come disse la calcolatrice al ragioniere? conta pure su di me",
            "qual è il colmo per una giraffa? essere nei guai fino al collo!",
            "come si chiama il papà di uno squalo? pasqualo"]
 
-indovinelli = ["cos'è che ha quattro gambe ma non può camminare?",
-               "cosa cade in inverno ma non si fa male?",
-               "cosa esce solo quando piove?",
-               "cosa arriva solo se hai gli occhi chiusi?",
-               "chi ha la vita appesa a un filo?"]
+indovinelli = {"cos'è che ha quattro gambe ma non può camminare?": ["tavolo", "sedia"],
+               "cosa cade in inverno ma non si fa male?": ["neve", "fiocchi"],
+               "cosa esce solo quando piove?": ["ombrello"],
+               "cosa arriva solo se hai gli occhi chiusi?": ["sonno", "morte"],
+               "chi ha la vita appesa a un filo?": ["ragno"]
+               }
 
+indo = ["cos'è che ha quattro gambe ma non può camminare?",
+        "cosa cade in inverno ma non si fa male?",
+        "cosa esce solo quando piove?",
+        "cosa arriva solo se hai gli occhi chiusi?",
+        "chi ha la vita appesa a un filo?"]
