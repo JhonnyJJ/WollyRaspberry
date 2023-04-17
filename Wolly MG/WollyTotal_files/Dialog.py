@@ -2,6 +2,7 @@ import random
 import re
 from frasiDialog import *
 import time
+#from motorsNew import *
 
 
 # AGGIUNGERE WHILE true DENTRO OGNI DEF CHE PRENDE IN CONSIDERAZIONE UNA PAROLA NON COLLEGATA A NESSUNA AZIONE
@@ -113,8 +114,8 @@ def facs(response):
 # barzellette V
 # indovinelli V
 def richiesta(response):
-    global talk, textSpeech
-    from chatbot import talk, textSpeech
+    global talk, textSpeech, playsound
+    from chatbot import talk, textSpeech, playsound
     i=0
     while i <= 1:
         if response is False:
@@ -128,7 +129,7 @@ def richiesta(response):
                 print(random.choice(noproblem) + "cosa vorresti vedere?")
                 textSpeech(random.choice(noproblem) + "cosa vorresti vedere?")  # aggiungere eventi
                 i = 0
-                while i<=1:
+                while i <= 1:
                     response = talk()
                     if response is False:
                         return
@@ -224,15 +225,38 @@ def ripRichiesta():
 
 
 def imitare():
-    
+    print("ecco come funziona il gioco, adesso imiterò un suono e tu dovrai dirmi che suono è")
+    textSpeech("ecco come funziona il gioco, adesso imiterò un suono e tu dovrai dirmi che suono è")
+    mimo = ["../../mp3/pipe.mp3"]
+    playsound(random.choice(mimo))
+    # mettere talk() e continuare con i tentativi
+    ripRichiesta()
 
 
-def canto():
-    
+def cantare():
+    canta = ["../../mp3/alien_sound.mp3"]
+    playsound(random.choice(canta))
+    # reface("sing")
+    # reface("sing")
+    # reface("sing")
+    ripRichiesta()
 
 
 def ballare():
-    
+    canzoni = ["../../mp3/mii.mp3", "../../mp3/jojos.mp3"]
+    durata = [0.9, 1, 1.5, 2, 1.8]
+    velocita = [0.6, 0.7]
+    movimento = [0, 1]
+    playsound(random.choice(canzoni))
+    c = 0
+    # while c < 13:
+    #     reface("crazy")
+    #     if random.choice(movimento) == 1:
+    #        destra(random.choice(durata), random.choice(velocita))
+    #     else:
+    #        sinistra(random.choice(durata), random.choice(velocita))
+    #     c += 1
+    ripRichiesta()
     
     
 def barzelletta():
@@ -255,11 +279,11 @@ def barzelletta():
             if re.search(wor, response):
                 print("va bene, ")
                 textSpeech("va bene, ")
-                i=0
+                i = 0
                 flag = False
         if flag:
             error("ripeti")
-            i+=1
+            i += 1
     error("ascolto")
     return
         
@@ -372,6 +396,6 @@ def error(cos):
     if cos == "ripeti":
         print(random.choice(err) + " potresti ripetere?")
         textSpeech(random.choice(err) + " potresti ripetere?")
-    elif cos== "ascolto":
+    elif cos == "ascolto":
         print(random.choice(err) + " resto in ascolto")
         textSpeech(random.choice(err) + " resto in ascolto")

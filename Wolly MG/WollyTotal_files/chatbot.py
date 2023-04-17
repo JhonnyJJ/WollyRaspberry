@@ -29,10 +29,10 @@ def talk():
         r = sr.Recognizer()
 
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, 1)
+            r.adjust_for_ambient_noise(source, 0.5)
             # add sound to help to know when to talk
-            print("ascolto")
             playsound("../../mp3/hearing.mp3")
+            print("ascolto")
             audio = r.listen(source, phrase_time_limit=4, timeout=None)
 
         try:

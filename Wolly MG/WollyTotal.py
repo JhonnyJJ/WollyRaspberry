@@ -46,7 +46,7 @@ def face():
     global label, x, espressione, root, p, frames
     time.sleep(0.3)
     root = Tk()
-    frames = 40
+    frames = 50
     x = 1
     p = 1
     # initialize a Tk structure
@@ -99,8 +99,7 @@ def niamPool():
     if piccolo == 0:
         root.after(7000, niamPool)
     elif piccolo == 1:
-        root.after(4000, niamPool)
-
+        root.after(5000, niamPool)
 
 # ----------fine processo faccia--------------
 

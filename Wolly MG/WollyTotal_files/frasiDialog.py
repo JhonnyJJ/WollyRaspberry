@@ -11,7 +11,7 @@ ecco = ["D'accordo, ecco una lista di quello che so fare!", "Va bene, ecco cosa 
         "so fare alcune cose simpatiche tra cui "]
 
 #indovinelli da aggiungere
-fare = ["So raccontare le barzellette, so fare gli indovinelli, so fare un gioco di imitazione e so cantare o ballare"]
+fare = ["So raccontare le barzellette, so fare gli indovinelli, so fare un gioco di imitazione e so cantare o ballare, "]
 
 vedere = ["vorresti vedermi fare qualcosa?", "ti piacerebbe vedermi fare qualcosa?", "vuoi che faccia qualche azione?",
           "vuoi mettermi alla prova?"]
