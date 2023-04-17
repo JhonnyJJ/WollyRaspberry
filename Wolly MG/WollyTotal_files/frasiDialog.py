@@ -11,7 +11,7 @@ ecco = ["D'accordo, ecco una lista di quello che so fare!", "Va bene, ecco cosa 
         "so fare alcune cose simpatiche tra cui "]
 
 #indovinelli da aggiungere
-fare = ["So raccontare le barzellette, so fare calcoli difficili, so cantare o ballare e so imitare dei suoni di cose e di animali "]
+fare = ["So raccontare le barzellette, so fare gli indovinelli, so fare un gioco di imitazione e so cantare o ballare"]
 
 vedere = ["vorresti vedermi fare qualcosa?", "ti piacerebbe vedermi fare qualcosa?", "vuoi che faccia qualche azione?",
           "vuoi mettermi alla prova?"]
@@ -33,8 +33,8 @@ err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace
        "ora non so risponderti, quando saprò la risposta sarai la prima persona a cui lo dirò!"]
 
 # ------- not understood phrases -------
-notundst = ["non sono riuscito a sentirti!", "come scusa, non ho capito?", "scusa non ho capito potresti ripetere?",
-            "non riesco a sentirti!"]
+notundst = ["non sono riuscito a sentirti! Ripeti quello che hai detto", "come scusa, non ho capito. Ripeti quello che hai detto", "scusa non ho capito. Ripeti quello che hai detto",
+            "non riesco a sentirti! Ripeti quello che hai detto"]
 
 noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
               "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
@@ -43,14 +43,19 @@ noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
 
 responses = ["hey ciao, ", "ciao, ", "heila ciao, "]
 
-ok = [r"\bok\b", r"\bsì\b", r"\bva bene\b",
-      r"\bcerto\b", r"\bsi\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
+ok = [r"\bok\b", r"\bsì\b", r"\bva bene\b", r"\bcerto\b", r"\bsi\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
 
 niente = [r"\bnulla\b", r"\bniente\b", r"\bnon importa\b", r"\blascia stare\b"]
 
 barze = [r"\bbattuta\b", r"\bbarzelletta\b", r"\bridere\b", r"\bbarzellette\b"]
 
 indovina = [r"\bindovinello\b", r"\bindovinelli\b", r"\brompicapo\b", r"\benigma\b"]
+
+ballo = [r"\bballa\b", r"\bballare\b", r"\bballo\b", r"\bdanza\b", r"\bballiamo\b", r"\bdanziamo\b"]
+
+canto = [r"\bcanta\b", r"\bcantare\b", r"\bcantami\b", r"\bcanto\b"]
+
+imita = [r"\bimita\b", r"\bimitare\b", r"\bimitazione\b"]
 
 # ------- DIALOG PHRASES -------
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",

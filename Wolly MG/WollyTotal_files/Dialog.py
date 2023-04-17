@@ -109,8 +109,7 @@ def facs(response):
 # si: chiede cosa vuole vedere
 # cantare 
 # ballare 
-# suoni 
-# emozioni 
+# emozioni (alberto)
 # barzellette V
 # indovinelli V
 def richiesta(response):
@@ -143,6 +142,21 @@ def richiesta(response):
                             print("va bene ")
                             textSpeech("va bene ")
                             return indovinello()
+                    for word in imita:
+                        if re.search(word, response):
+                            print("va bene ")
+                            textSpeech("va bene ")
+                            return imitare()
+                    for word in ballo:
+                        if re.search(word, response):
+                            print("va bene ")
+                            textSpeech("va bene ")
+                            return ballare()
+                    for word in canto:
+                        if re.search(word, response):
+                            print("va bene ")
+                            textSpeech("va bene ")
+                            return cantare()
                     error("ripeti")
                     i += 1
                 return error("ascolto")
@@ -185,6 +199,21 @@ def ripRichiesta():
                             print("va bene ")
                             textSpeech("va bene ")
                             return indovinello()
+                    for word in imita:
+                        if re.search(word, response):
+                            print("va bene ")
+                            textSpeech("va bene ")
+                            return imitare()
+                    for word in ballo:
+                        if re.search(word, response):
+                            print("va bene ")
+                            textSpeech("va bene ")
+                            return ballare()
+                    for word in canto:
+                        if re.search(word, response):
+                            print("va bene ")
+                            textSpeech("va bene ")
+                            return cantare()
                     error("ripeti")
                     i += 1
                 return error("ascolto")
@@ -194,6 +223,18 @@ def ripRichiesta():
     return
 
 
+def imitare():
+    
+
+
+def canto():
+    
+
+
+def ballare():
+    
+    
+    
 def barzelletta():
     i=0
     while i <= 1:
