@@ -54,7 +54,10 @@ indovina = [r"\bindovinello\b", r"\bindovinelli\b", r"\brompicapo\b", r"\benigma
 
 # ------- DIALOG PHRASES -------
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
-             "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!"]
+             "sono stato creato utilizzando un computer che si chiama Raspberry, è esattamente come un computer normale, solo un po più piccolo!",
+             "sono stato ospite alle ATP finals di Torino, è stato molto divertente!",
+             "sono stato creato circa 6 anni fa qui nell'università di Torino; in questi 6 anni sono cambiato moltissimo",
+             "ho partecipato a delle attività didattiche nelle scuole, mi sono divertito moltissimo"]
 
 noproblem = ["ok nessun problema, ", "okay , ", " va bene, ", "okay capisco, ", "Va bene, nessun problema! ",
              "D'accordo, ", "Ho capito, ", "perfetto, "]
