@@ -45,6 +45,8 @@ responses = ["hey ciao, ", "ciao, ", "heila ciao, "]
 
 ok = [r"\bok\b", r"\bsì\b", r"\bva bene\b", r"\bcerto\b", r"\bsi\b"]  # r vale a dire la stringa raw, \b...\b invece è la parola singola separata da caratteri e numeri
 
+nonSo = [r"\bnon lo so\b", r"\bnon so\b"]
+
 niente = [r"\bnulla\b", r"\bniente\b", r"\bnon importa\b", r"\blascia stare\b"]
 
 barze = [r"\bbattuta\b", r"\bbarzelletta\b", r"\bridere\b", r"\bbarzellette\b"]
@@ -64,7 +66,7 @@ curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi 
              "sono stato creato circa 6 anni fa qui nell'università di Torino; in questi 6 anni sono cambiato moltissimo",
              "ho partecipato a delle attività didattiche nelle scuole, mi sono divertito moltissimo"]
 
-noproblem = ["ok nessun problema, ", "okay , ", " va bene, ", "okay capisco, ", "Va bene, nessun problema! ",
+noproblem = ["ok nessun problema, ", "okay , ", " va bene, ", "Va bene, nessun problema! ",
              "D'accordo, ", "Ho capito, ", "perfetto, "]
 
 magarifatto = ["magari posso incuriosirti con un fatto assurdo?",
@@ -99,3 +101,11 @@ indo = ["cos'è che ha quattro gambe ma non può camminare?",
         "cosa esce solo quando piove?",
         "cosa arriva solo se hai gli occhi chiusi?",
         "chi ha la vita appesa a un filo?"]
+
+mimo = {"../../mp3/pipe.mp3": ["tubo", "tubi", "tubatura"],
+        "../../mp3/elefante.mp3": ["elefante", "elefanti" ,"proboscide"],
+        "../../mp3/simmia.mp3": ["scimmia", "gorilla", "scimpanzè"],
+        "../../mp3/chitarra.mp3": ["chitarra", "assolo" , "musica", "basso", "chitarrista"]
+    }
+
+mimata = ["../../mp3/pipe.mp3", "../../mp3/elefante.mp3", "../../mp3/simmia.mp3", "../../mp3/chitarra.mp3"]

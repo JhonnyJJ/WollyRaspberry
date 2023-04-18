@@ -29,11 +29,12 @@ def talk():
         r = sr.Recognizer()
 
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, 0.5)
+            r.adjust_for_ambient_noise(source, 0.8)
             # add sound to help to know when to talk
             playsound("../../mp3/hearing.mp3")
+            time.sleep(0.7)
             print("ascolto")
-            audio = r.listen(source, phrase_time_limit=4, timeout=None)
+            audio = r.listen(source, phrase_time_limit=6, timeout=None)
 
         try:
             response = r.recognize_google(audio, language="IT-IT")
@@ -53,8 +54,7 @@ def talk():
             
 # hardcoded chatbot AGGIUNGERE QUALCHE TIPO DI FACCIA CON DOMANDE O EMOZIONI
 def chat(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
-    i=0
-    while i <= 1:
+    while True:
         if re.search(r"\bno\b", response):
             print(random.choice(noproblem) + random.choice(allora))
             textSpeech(random.choice(noproblem) + random.choice(allora))
@@ -72,19 +72,15 @@ def chat(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
                 textSpeech(random.choice(noproblem) + " resto in ascolto")
                 return
             
-        error("ripeti")
+        error()
         response = talk()
-        i += 1
-        
-    error("ascolto")
-    return
 
 
 def chatInit():
     while True:
         r = sr.Recognizer()
         with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, 2)
+            r.adjust_for_ambient_noise(source, 1)
             print("ascolto")
             audio = r.listen(source, timeout=None, phrase_time_limit=6)
 
