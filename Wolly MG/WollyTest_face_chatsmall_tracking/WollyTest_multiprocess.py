@@ -20,7 +20,7 @@ import random
 
 
 # import frasi necessarie
-from frasi import *
+from frasiDialog import *
 
 
 # signal handler per ctrl+c alla fine del programma
@@ -49,6 +49,7 @@ def face():
     frames = 50
     x = 1
     p = 1
+    
     # initialize a Tk structure
     root.attributes('-fullscreen', True)
 
@@ -192,7 +193,6 @@ def chatInit():
 
             for word in wword:
                 if re.search(word, text.lower()):
-                    stopTracking()
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
                     reface("wink")
@@ -288,3 +288,4 @@ if __name__ == '__main__':
     process2.start()
     time.sleep(1)
     signal.signal(signal.SIGINT, signal_handler)
+

@@ -32,7 +32,7 @@ def talk():
             r.adjust_for_ambient_noise(source, 0.8)
             # add sound to help to know when to talk
             playsound("../../mp3/hearing.mp3")
-            time.sleep(0.7)
+            time.sleep(0.8)
             print("ascolto")
             audio = r.listen(source, phrase_time_limit=6, timeout=None)
 
@@ -52,8 +52,8 @@ def talk():
                 return False
             
             
-# hardcoded chatbot AGGIUNGERE QUALCHE TIPO DI FACCIA CON DOMANDE O EMOZIONI
-def chat(response):  # CREARE ALTRE DEF NEL CASO DI DIALOGO PIU' PROFONDO
+# hardcoded chatbot 
+def chat(response):  
     while True:
         if re.search(r"\bno\b", response):
             print(random.choice(noproblem) + random.choice(allora))
