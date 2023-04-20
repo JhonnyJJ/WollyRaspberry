@@ -498,7 +498,6 @@ def ripInd():
                 textSpeech(random.choice(noproblem))
                 return indovinello()
         error()
-        i+=1
             
                 
 def error():

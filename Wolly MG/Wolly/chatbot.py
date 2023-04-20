@@ -1,8 +1,10 @@
 import time
+import random
+import re
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
-from Dialog import *
+#from Dialog import *
 from frasiDialog import *
 
 
@@ -58,12 +60,12 @@ def chat(response):
         if re.search(r"\bno\b", response):
             print(random.choice(noproblem) + random.choice(allora))
             textSpeech(random.choice(noproblem) + random.choice(allora))
-            return curioso(talk())
+            return #curioso(talk())
         for word in ok:
             if re.search(word, response):  # parla di quello che sa fare wolly
                 print(random.choice(fare))
                 textSpeech(random.choice(ecco) + random.choice(fare) + random.choice(vedere))
-                return richiesta(talk())
+                return #richiesta(talk())
 
         # stop immediately
         for word in niente:
@@ -100,6 +102,11 @@ def chatInit():
             print("---------Non ho capito---------")
         except sr.RequestError as e:
             print("Errore con il collegamento API: {0}".format(e))
+
+def error():
+    print(random.choice(err) + " potresti ripetere?")
+    textSpeech(random.choice(err) + " potresti ripetere?")
+
             
 
 if __name__ == '__main__':

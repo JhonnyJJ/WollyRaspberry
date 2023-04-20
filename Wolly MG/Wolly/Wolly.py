@@ -11,8 +11,6 @@ from PIL import Image, ImageTk
 # import chatbot
 import speech_recognition as sr
 from gtts import gTTS
-from pygame import mixer
-import re
 
 # import dialog
 import random
@@ -319,7 +317,7 @@ def facs():
                             print("va bene, " + random.choice(realfacs))
                             textSpeech(random.choice(noproblem) + random.choice(realfacs))
                             reface("surprise")
-                            tiem.sleep(7)
+                            time.sleep(7)
                             textSpeech("ne vuoi sentire un altro?")
                             flag = False
 
@@ -405,8 +403,7 @@ def ripRichiesta():
             if re.search(word, response):
                 print(random.choice(noproblem) + "cosa vorresti vedere?")
                 textSpeech(random.choice(noproblem) + "cosa vorresti vedere?")  # aggiungere eventi
-                reaface("happy")
-                time.sleep(3)
+                reface("happy")
                 
                 while True:
                     response = talk()
@@ -685,7 +682,7 @@ def indovinello():
                 if re.search(r"\bno\b", response):
                     print("d'accordo, ti lascio riprovare")
                     textSpeech("d'accordo, ti lascio riprovare")
-                    reaface("wink")
+                    reface("wink")
                     time.sleep(3)
                     return ritenta()
                 for wor in ok:
@@ -706,14 +703,14 @@ def indovinello():
         if re.search(r"\bno\b", response):
             print("d'accordo, ti lascio riprovare")
             textSpeech("d'accordo, ti lascio riprovare")
-            reaface("wink")
+            reface("wink")
             time.sleep(3)
             return ritenta()
         for wor in ok:
             if re.search(wor, response):
                 print("la risposta era " + indovinelli[ind][0])
                 textSpeech("la risposta era " + indovinelli[ind][0])
-                reaface("happy")
+                reface("happy")
                 time.sleep(3)
                 return ripInd()
         error() 
@@ -749,7 +746,7 @@ def ritenta():
                 if re.search(r"\bno\b", response):
                     print("d'accordo, ti lascio riprovare")
                     textSpeech("d'accordo, ti lascio riprovare")
-                    reaface("wink")
+                    reface("wink")
                     time.sleep(3)
                     return ritenta()
                 for wor in ok:
