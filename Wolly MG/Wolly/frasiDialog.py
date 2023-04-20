@@ -28,8 +28,8 @@ quando = ["quando hai bisogno di me chiamami e ti risponderò", "se avessi bisog
           "se avessi bisogno di me chiamami"]
 
 # ------- ERROR phrases -------
-err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa",
-       "faccio difficoltà a capire cosa intendi", "vorrei poterti dare una risposta ma non posso!",
+err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa.",
+       "faccio difficoltà a capire cosa intendi.", "vorrei poterti dare una risposta ma non posso!",
        "ora non so risponderti, quando saprò la risposta sarai la prima persona a cui lo dirò!"]
 
 # ------- not understood phrases -------
@@ -37,7 +37,7 @@ notundst = ["non sono riuscito a sentirti! Ripeti quello che hai detto", "come s
             "non riesco a sentirti! Ripeti quello che hai detto"]
 
 noresponse = ["non riesco a capirti! vado a ricalibrare il mio microfono!",
-              "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma"]
+              "purtroppo non riesco a capire cosa hai detto, vado a prendermi un secondo di pausa ma "]
 
 # ------- HUMAN INPUTS -------
 
@@ -57,7 +57,7 @@ ballo = [r"\bballa\b", r"\bballare\b", r"\bballo\b", r"\bdanza\b", r"\bballiamo\
 
 canto = [r"\bcanta\b", r"\bcantare\b", r"\bcantami\b", r"\bcanto\b"]
 
-imita = [r"\bimita\b", r"\bimitare\b", r"\bimitazione\b"]
+imita = [r"\bimita\b", r"\bimitare\b", r"\bimitazione\b" r"\mimo\b" r"\mimi\b"]
 
 # ------- DIALOG PHRASES -------
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",
