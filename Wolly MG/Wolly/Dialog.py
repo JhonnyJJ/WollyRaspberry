@@ -10,90 +10,74 @@ from motorsNew import *
 
 # si: curiosità di wolly
 # no: fatti assurdi
-def curioso(response):
-    global talk, textSpeech
-    from chatbot import talk, textSpeech
+def curioso():
+    from chatbot import textSpeech, playsound
+    global textSpeech, playsound
     
     while True:
+        response = input()
         if response is False:  # controllo si o no per curiosità wolly
             return
         elif re.search(r"\bno\b", response):
+            #("sad", 5)
             print(random.choice(noproblem) + random.choice(magarifatto))
             textSpeech(random.choice(noproblem) + random.choice(magarifatto))
-            return facs(talk())
+            return facs()
         for word in ok:
             if re.search(word, response):  # curiosità su wolly
                 flag = True  # flag necessario per ripetere curiosità saltando l'if erorre
                 print(random.choice(curiosita))
                 textSpeech(random.choice(curiosita))
-                # reface("wink")
-                # time.sleep(1)
+                #("wink", 4)
+                print("ne vuoi sentire un'altra?")
                 textSpeech("ne vuoi sentire un'altra?")
                 
-                while True:
-                    response = talk()
-                    if response is False:
-                        return
-                    elif re.search(r"\bno\b", response):
-                        print(random.choice(noproblem) + random.choice(magarifatto))
-                        textSpeech(random.choice(noproblem) + random.choice(magarifatto))
-                        return facs(talk())
-                    for wor in ok:
-                        if re.search(wor, response):
-                            print(random.choice(noproblem) + random.choice(curiosita))
-                            textSpeech(random.choice(noproblem) + random.choice(curiosita))
-                            # reface("wink")
-                            # time.sleep(1)
-                            textSpeech("ne vuoi sentire un'altra?")
-                            flag = False
-
-                    if flag:
-                        error()
         error()
-        response = talk()
 
 
 # no : stop
 # si : un'altra?
-def facs(response):
+def facs():
     
     while True:
+        response = input()
         if response is False:
             return
         elif re.search(r"\bno\b", response):
+            #("sad", 5)
             print(random.choice(noproblem) + " se hai ancora bisogno di me chiamami!")
             textSpeech(random.choice(noproblem) + " se hai ancora bisogno di me chiamami!")
+            #("sleepy", 0)
             return
         for word in ok:
             if re.search(word, response):
                 flag = True
                 print(random.choice(realfacs))
                 textSpeech(random.choice(realfacs))
-                # reface("wink")
-                # time.sleep(1)
+                #("surprise", 5)
                 textSpeech("ne vuoi sentire un altro?")
                 
                 while True:
-                    response = talk()
+                    response = input()
                     if response is False:
                         return
                     elif re.search(r"\bno\b", response):
                         print(random.choice(noproblem))
                         textSpeech(random.choice(noproblem) + " se hai ancora bisogno di me chiamami!")
-                        # reface("wink")
+                        #("wink", 0)
                         return
                     for wor in ok:
                         if re.search(wor, response):
                             print("va bene, " + random.choice(realfacs))
                             textSpeech(random.choice(noproblem) + random.choice(realfacs))
-                            # reface("wink")
+                            #("surprise", 5)
                             textSpeech("ne vuoi sentire un altro?")
                             flag = False
 
                     if flag:
                         error()
         error()
-        response = talk()
+    
 
 # no: chiede se vuole sentire una curiosità
 # si: chiede cosa vuole vedere
@@ -103,24 +87,29 @@ def facs(response):
 # mimo V
 # barzellette V
 # indovinelli V
-def richiesta(response):
-    global talk, textSpeech, playsound
-    from chatbot import talk, textSpeech, playsound
-
+def richiesta():
+    from chatbot import textSpeech, playsound
+    global textSpeech, playsound
+    
     while True:
+        response = input()
         if response is False:
             return
         elif re.search(r"\bno\b", response):
+            #("sad", 5)
             print(random.choice(noproblem) + random.choice(allora))
             textSpeech(random.choice(noproblem) + random.choice(allora))
-            return curioso(talk())
+            return curioso()
         for word in ok:
             if re.search(word, response):
                 print(random.choice(noproblem) + " cosa vorresti vedere?")
-                textSpeech(random.choice(noproblem) + " cosa vorresti vedere?")  
+                textSpeech(random.choice(noproblem) + " cosa vorresti vedere?")
+                #("happy", 0)
+                print("prova")
                 
                 while True:
-                    response = talk()
+                    response = input()
+                    print(response)
                     if response is False:
                         return
                     for word in barze:
@@ -140,18 +129,16 @@ def richiesta(response):
                             return imitare()
                     for word in ballo:
                         if re.search(word, response):
-                            print(random.choice(noproblem))
-                            textSpeech(random.choice(noproblem))
+                            print(random.choice(noproblem) + "adesso mi scateno un po'")
+                            textSpeech(random.choice(noproblem) + "adesso mi scateno un po'")
                             return ballare()
                     for word in canto:
                         if re.search(word, response):
-                            print(random.choice(noproblem))
-                            textSpeech(random.choice(noproblem))
+                            print(random.choice(noproblem) + "devo un attimo scaldare l'altoparlante")
+                            textSpeech(random.choice(noproblem) + "devo un attimo scaldare l'altoparlante")
                             return cantare()
                     error()  
         error()
-        response = talk()
-    
 
 
 def ripRichiesta():
@@ -159,20 +146,23 @@ def ripRichiesta():
     textSpeech(" vuoi vedere altro?")
     
     while True:
-        response = talk()
+        print("eccomi")
+        response = input()
         if response is False:
                 return
         elif re.search(r"\bno\b", response):
             print(random.choice(noproblem) + random.choice(allora))
             textSpeech(random.choice(noproblem) + random.choice(allora))
-            return curioso(talk())
+            #("wink",0)
+            return curioso()
         for word in ok:
             if re.search(word, response):
                 print(random.choice(noproblem) + "cosa vorresti vedere?")
                 textSpeech(random.choice(noproblem) + "cosa vorresti vedere?")  # aggiungere eventi
+                #("happy", 0)
                 
                 while True:
-                    response = talk()
+                    response = input()
                     if response is False:
                         return
                     for word in barze:
@@ -192,42 +182,57 @@ def ripRichiesta():
                             return imitare()
                     for word in ballo:
                         if re.search(word, response):
-                            print(random.choice(noproblem))
-                            textSpeech(random.choice(noproblem))
+                            print(random.choice(noproblem) + "adesso mi scateno un po'")
+                            textSpeech(random.choice(noproblem) + "adesso mi scateno un po'")
                             return ballare()
                     for word in canto:
                         if re.search(word, response):
-                            print(random.choice(noproblem))
-                            textSpeech(random.choice(noproblem))
+                            print(random.choice(noproblem) + "devo un attimo scaldare l'altoparlante")
+                            textSpeech(random.choice(noproblem) + "devo un attimo scaldare l'altoparlante")
                             return cantare()
                     error()
         error()
 
 
 def cantare():
+    movimento = [0, 1]
+    durata = [0.2, 0.1]
     canta = ["../../mp3/alien_sound.mp3", "../../mp3/pavarotti.mp3"]
-    playsound(random.choice(canta))
-    # reface("sing")
-    # reface("sing")
+    mixer.init()
+    mixer.music.load(random.choice(canta))
+    mixer.music.play()
+    c = 0
+#     #("sing",0)
+#     while c < 35:
+#         if c == 10 or c == 18:
+#             #("sing",0)  
+#         destra(random.choice(durata), 0.46)
+#         sinistra(random.choice(durata), 0.46)
+#         c += 1
+#        
+    mixer.quit()
     ripRichiesta()
 
 
 def ballare():
     canzoni = ["../../mp3/mii.mp3", "../../mp3/jojos.mp3"]
-    durata = [0.5, 0.4, 0.3]
+    durata = [0.2, 0.5, 0.4, 0.3]
     velocita = [0.5, 0.55]
     movimento = [0, 1]
     mixer.init()
     mixer.music.load(random.choice(canzoni))
     mixer.music.play()
-    c = 0
-    while c < 30:
-        #reface("crazy")
-        if random.choice(movimento) == 1:
-           destra(random.choice(durata), random.choice(velocita))
-        else:
-           sinistra(random.choice(durata), random.choice(velocita))
-        c += 1
+#     c = 0
+#     #("crazy",0)
+#     while c < 36:
+#         if c == 20:
+#             #("crazy",0)
+#         if random.choice(movimento) == 1:
+#            destra(random.choice(durata), random.choice(velocita))
+#         else:
+#            sinistra(random.choice(durata), random.choice(velocita))
+#         c += 1
+    mixer.quit()
     ripRichiesta()
     
     
@@ -235,18 +240,18 @@ def barzelletta():
     while True:
         print(random.choice(battuta))
         textSpeech(random.choice(battuta))
-        # reface("crazy")
+        #("crazy",0)
         playsound("../../mp3/joke.mp3")
         textSpeech("ne vuoi sentire un'altra?")
         flag = True
-        response = talk()
+        response = input()
         
         if response is False:
             return
         elif re.search(r"\bno\b", response):
             print(random.choice(noproblem))
             textSpeech(random.choice(noproblem))
-            # reface("wink")
+            #("wink",4)
             return ripRichiesta()
         for wor in ok:
             if re.search(wor, response):
@@ -265,11 +270,12 @@ def imitare():
     
     mima = random.choice(mimata)
     sol = mimo[mima]
+    #("sing",0)
     playsound(mima)
     print("cosa ho imitato?")
     textSpeech("cosa ho imitato?")
     
-    response=talk()
+    response=input()
     if response is False: 
         return
     for word in sol:
@@ -277,53 +283,61 @@ def imitare():
             risp = word
             print("bene, la risposta era proprio " + risp)
             textSpeech("bene, la risposta era proprio " + risp)
+            #("happy",4)
             sbagliato = False
             return ripMimo()
     for word in nonSo:
         if re.search(word, response):
             print("non ti preoccupare! Vuoi che ti dica la risposta?")
             textSpeech("non ti preoccupare! Vuoi che ti dica la risposta?")
+            #("wink",0)
 
             while True:
-                response = talk()
+                response = input()
                 if response is False:
                     return
                 if re.search(r"\bno\b", response):
                     print("d'accordo, ti lascio riprovare")
                     textSpeech("d'accordo, ti lascio riprovare")
+                    #("wink",4)
                     return ritentaMimo()
                 for wor in ok:
                     if re.search(wor, response):
                         print("la risposta era " + mimo[mima][0])
                         textSpeech("la risposta era " + mimo[mima][0])
+                        #("happy",3)
                         return ripMimo()
                 error()
-                    
+    #("sad",4)                
     print("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     textSpeech("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     
+    
     while True:
-        response = talk()
+        response = input()
         if response is False:
             return
         if re.search(r"\bno\b", response):
             print("d'accordo, ti lascio riprovare")
             textSpeech("d'accordo, ti lascio riprovare")
+            #("wink",3)
             return ritentaMimo()
         for wor in ok:
             if re.search(wor, response):
                 print("la risposta era " + mimo[mima][0])
                 textSpeech("la risposta era " + mimo[mima][0])
+                #("happy",3)
                 return ripMimo()
         error()
 
 
 def ritentaMimo():
     global mima, sol
+    #("sing",0)
     playsound(mima)
     print("cosa ho imitato?")
     textSpeech("cosa ho imitato?")
-    response = talk()
+    response = input()
     if response is False: 
         return
     for word in sol:
@@ -331,42 +345,49 @@ def ritentaMimo():
             risp = word
             print("bene, la risposta era proprio " + risp)
             textSpeech("bene, la risposta era proprio " + risp)
+            #("happy",3)
             return ripMimo()
     for word in nonSo:
         if re.search(word, response):
             print("non ti preoccupare! Vuoi che ti dica la risposta?")
             textSpeech("non ti preoccupare! Vuoi che ti dica la risposta?")
+            #("wink",0)
 
             while True:
-                response = talk()
+                response = input()
                 if response is False:
                     return
                 if re.search(r"\bno\b", response):
                     print("d'accordo, ti lascio riprovare")
                     textSpeech("d'accordo, ti lascio riprovare")
+                    #("wink",0)
                     return ritentaMimo()
                 for wor in ok:
                     if re.search(wor, response):
                         print("la risposta era " + mimo[mima][0])
                         textSpeech("la risposta era " + mimo[mima][0])
+                        #("happy",3)
                         return ripMimo()
                 error()
             
+    #("sad",4)
     print("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     textSpeech("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     
     while True:
-        response = talk()
+        response = input()
         if response is False:
             return
         if re.search(r"\bno\b", response):
             print("d'accordo, ti lascio riprovare")
             textSpeech("d'accordo, ti lascio riprovare")
+            #("wink",3)
             return ritentaMimo()
         for wor in ok:
             if re.search(wor, response):
                 print("la risposta era " + indovinelli[ind][0])
                 textSpeech("la risposta era " + indovinelli[ind][0])
+                #("happy",3)
                 return ripMimo()
         error()
      
@@ -377,7 +398,7 @@ def ripMimo():
     textSpeech("vuoi rigiocare?")
     
     while True:
-        response = talk()
+        response = input()
         if response is False:
             return
         elif re.search(r"\bno\b", response):
@@ -388,6 +409,7 @@ def ripMimo():
             if re.search(word, response):
                 print(random.choice(noproblem))
                 textSpeech(random.choice(noproblem))
+                #("happy",3)
                 return imitare()
         error()
          
@@ -397,7 +419,8 @@ def indovinello():
     
     ind = random.choice(indo)
     textSpeech(ind)
-    response = talk()
+    #("surprise",0)
+    response = input()
     soluzione = indovinelli[ind]
     if response is False: 
         return
@@ -406,40 +429,48 @@ def indovinello():
             risp = word
             print("bene, la risposta era proprio " + risp)
             textSpeech("bene, la risposta era proprio " + risp)
+            #("happy",3)
             return ripInd()
     for word in nonSo:
         if re.search(word, response):
             print("non ti preoccupare! Vuoi che ti dica la risposta?")
             textSpeech("non ti preoccupare! Vuoi che ti dica la risposta?")
+            #("wink",0)
             while True:
-                response = talk()
+                response = input()
                 if response is False:
                     return
                 if re.search(r"\bno\b", response):
                     print("d'accordo, ti lascio riprovare")
                     textSpeech("d'accordo, ti lascio riprovare")
+                    #("wink",3)
                     return ritenta()
                 for wor in ok:
                     if re.search(wor, response):
                         print("la risposta era " + indovinelli[ind][0])
                         textSpeech("la risposta era " + indovinelli[ind][0])
+                        #("happy",0)
                         return ripInd()
                 error()
+                
+    #("sad",4)
     print("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     textSpeech("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     
     while True:
-        response = talk()
+        response = input()
         if response is False:
             return
         if re.search(r"\bno\b", response):
             print("d'accordo, ti lascio riprovare")
             textSpeech("d'accordo, ti lascio riprovare")
+            #("wink",3)
             return ritenta()
         for wor in ok:
             if re.search(wor, response):
                 print("la risposta era " + indovinelli[ind][0])
                 textSpeech("la risposta era " + indovinelli[ind][0])
+                #("happy",3)
                 return ripInd()
         error() 
      
@@ -450,7 +481,8 @@ def ritenta():
     
     print("ecco l'indovinello, " + ind)
     textSpeech("ecco l'indovinello, " + ind)
-    response = talk()
+    #("wink",0)
+    response = input()
     if response is False: 
             return
     for word in soluzione:
@@ -458,24 +490,48 @@ def ritenta():
             risp = word
             print("bene, la risposta era proprio " + risp)
             textSpeech("bene, la risposta era proprio " + risp)
+            #("happy",3)
             sbagliato = False
             return ripInd()
-        
+    for word in nonSo:
+        if re.search(word, response):
+            print("non ti preoccupare! Vuoi che ti dica la risposta?")
+            textSpeech("non ti preoccupare! Vuoi che ti dica la risposta?")
+            #("wink",0)
+            while True:
+                response = input()
+                if response is False:
+                    return
+                if re.search(r"\bno\b", response):
+                    print("d'accordo, ti lascio riprovare")
+                    textSpeech("d'accordo, ti lascio riprovare")
+                    #("wink",3)
+                    return ritenta()
+                for wor in ok:
+                    if re.search(wor, response):
+                        print("la risposta era " + indovinelli[ind][0])
+                        textSpeech("la risposta era " + indovinelli[ind][0])
+                        #("happy",3)
+                        return ripInd()
+                error()
+    #("sad",4)  
     print("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     textSpeech("Ops! Non è la risposta corretta! Vuoi che ti dica la risposta?")
     
     while True:
-        response = talk()
+        response = input()
         if response is False:
             return
         for wor in ok:
             if re.search(wor, response):
                 print("la risposta era " + indovinelli[ind][0])
                 textSpeech("la risposta era " + indovinelli[ind][0])
+                #("happy",3)
                 return ripInd()
         if re.search(r"\bno\b", response):
             print("d'accordo, ti lascio riprovare")
             textSpeech("d'accordo, ti lascio riprovare")
+            #("wink",3)
             return ritenta()
         error()
     
@@ -483,9 +539,10 @@ def ritenta():
 def ripInd():
     print("ne vuoi sentire un'altro?")
     textSpeech("ne vuoi sentire un'altro?")
+    #("happy",0)
     
     while True:
-        response = talk()
+        response = input()
         if response is False:
             return
         elif re.search(r"\bno\b", response):
@@ -496,11 +553,12 @@ def ripInd():
             if re.search(word, response):
                 print(random.choice(noproblem))
                 textSpeech(random.choice(noproblem))
+                #("wink",4)
                 return indovinello()
         error()
             
                 
 def error():
-    from chatbot import textSpeech
-    print(random.choice(err) + " potresti ripetere?")
-    textSpeech(random.choice(err) + " potresti ripetere?")
+    print(random.choice(err) + " Ripeti quello che hai detto")
+    textSpeech(random.choice(err) + " Ripeti quello che hai detto")
+

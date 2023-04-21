@@ -24,8 +24,8 @@ ciao = ["ciao sono wolly, ", "heila ciao, io sono wolly, ", "hey ciao, mi chiamo
 
 ascolto = ["resto in ascolto, ", " ", "sono tutto orecchi, ", "sono a tua disposizione, ", "adesso sono in ascolto, "]
 
-quando = ["quando hai bisogno di me chiamami e ti risponderò", "se avessi bisogno di me chiamami", "se volessi sapere quello che so fare chiamami",
-          "se avessi bisogno di me chiamami"]
+quando = ["quando hai bisogno di me salutami pronunciando il mio nome e ti risponderò", "se avessi bisogno di me salutami pronunciando il mio nome",
+          "se volessi sapere quello che so fare salutami pronunciando il mio nome"]
 
 # ------- ERROR phrases -------
 err = ["forse non sono stato programmato per rispondere a questo!", "Mi dispiace, non so darti una risposta precisa.",
@@ -57,7 +57,7 @@ ballo = [r"\bballa\b", r"\bballare\b", r"\bballo\b", r"\bdanza\b", r"\bballiamo\
 
 canto = [r"\bcanta\b", r"\bcantare\b", r"\bcantami\b", r"\bcanto\b"]
 
-imita = [r"\bimita\b", r"\bimitare\b", r"\bimitazione\b" r"\mimo\b" r"\mimi\b"]
+imita = [r"\bimita\b", r"\bimitare\b", r"\bimitazione\b", r"\bmimo\b", r"\bmimi\b"]
 
 # ------- DIALOG PHRASES -------
 curiosita = ["sono un robottino creato per diventare un insegnante, prima o poi con tanto duro lavoro lo diventerò",

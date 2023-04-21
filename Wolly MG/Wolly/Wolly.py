@@ -12,6 +12,9 @@ from PIL import Image, ImageTk
 import speech_recognition as sr
 from gtts import gTTS
 
+# import tracking
+import cv2
+
 # import dialog
 import random
 import re
@@ -23,10 +26,11 @@ from motorsNew import *
 
 # signal handler per ctrl+c alla fine del programma
 def signal_handler(sig, frame):
-    global process2
+    global process2, process3
     print('You ended the program')
     process1.terminate()
     process2.terminate()
+    process4.terminate()
     process3.terminate()
     time.sleep(3)
     sys.exit(0)
@@ -47,6 +51,74 @@ def default():
     t.mainloop()
 # ----------fine processo 1--------------
 
+# -------------TRACK FACE proc4-----------------
+#face tracking che dopo aver visto una persona ascolta se viene chiamato
+
+def track():
+    global process3
+    # cascade classifier for face tracking
+    face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
+
+    # inizializing camera capture
+    cap = cv2.VideoCapture(0)
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320);
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200);
+    time.sleep(1)
+
+    # Check if the webcam is opened correctly
+    if not cap.isOpened():
+        raise IOError("Cannot open webcam")
+
+    # infinite loop, it can be stopped with any desired input
+    while True:
+
+        # capture frame by frame
+        ret, frame = cap.read()
+
+        if ret == False:
+            print("error getting image")
+            continue
+
+        # gray scaling for easier detection
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = cv2.equalizeHist(gray)
+
+        # face detection for each frame
+        faces = face_cascade.detectMultiScale(gray, 1.1, 3, 0, (10, 10))
+        
+        print(len(faces))
+
+        # if the number of faces is greater than 0 wolly will introduce himself
+        if 0 < len(faces) != 0:
+            print("TTS", len(faces))
+            textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
+            
+            while True:
+                r = sr.Recognizer()
+                with sr.Microphone() as source:
+                    r.adjust_for_ambient_noise(source, 1)
+                    print("ascolto")
+                    audio = r.listen(source, timeout=None, phrase_time_limit = 10)
+
+                try:
+                    text = r.recognize_google(audio, language="IT-IT")
+
+                    for word in wword:
+                        if re.search(word, text.lower()):
+                            print(random.choice(responses) + random.choice(posso))
+                            textSpeech(random.choice(responses) + random.choice(posso))
+                            reface("happy",0)
+                            chat() #aggiungere variabile per uscire dall'ascolto chat
+
+                except sr.UnknownValueError:
+                    print("---------Non ho capito---------")
+                except sr.RequestError as e:
+                    print("Errore con il collegamento API: {0}".format(e))
+            
+
+
+#-----------------fine track face proc4------------------
+            
 
 # ------------------PROCESSO 2------------------
 # permette il cambio di faccia, utilizzando espressione come globale per essere accessibile al secondo processo
@@ -143,7 +215,7 @@ def talk():
             r.adjust_for_ambient_noise(source, 0.8)
             # add sound to help to know when to talk
             playsound("../../mp3/hearing.mp3")
-            time.sleep(1)
+            time.sleep(1.3)
             print("ascolto")
             audio = r.listen(source, timeout=None, phrase_time_limit = 8)
 
@@ -165,7 +237,8 @@ def talk():
             
             
 # hardcoded chatbot 
-def chat():  
+def chat():
+    global textSpeech
     while True:
         response = talk()
         if response is False:
@@ -187,34 +260,10 @@ def chat():
             if word in response:
                 print(random.choice(noproblem) + " resto in ascolto")
                 textSpeech(random.choice(noproblem) + " resto in ascolto")
-                reface("sleepy",0)
+                reface("sleepy", 5)
                 return
             
         error()
-
-
-def chatInit():
-    while True:
-        r = sr.Recognizer()
-        with sr.Microphone() as source:
-            r.adjust_for_ambient_noise(source, 1)
-            print("ascolto")
-            audio = r.listen(source, timeout=None, phrase_time_limit = 10)
-
-        try:
-            text = r.recognize_google(audio, language="IT-IT")
-
-            for word in wword:
-                if re.search(word, text.lower()):
-                    print(random.choice(responses) + random.choice(posso))
-                    textSpeech(random.choice(responses) + random.choice(posso))
-                    reface("happy",0)
-                    chat()
-
-        except sr.UnknownValueError:
-            print("---------Non ho capito---------")
-        except sr.RequestError as e:
-            print("Errore con il collegamento API: {0}".format(e))
 
 
 def reface(espr, tempo):
@@ -238,6 +287,7 @@ def change(espr, tempo):
 def curioso():
     
     while True:
+        flag = True
         response = talk()
         if response is False:  # controllo si o no per curiosità wolly
             return
@@ -254,8 +304,9 @@ def curioso():
                 reface("wink", 4)
                 print("ne vuoi sentire un'altra?")
                 textSpeech("ne vuoi sentire un'altra?")
-                
-        error()
+                flag = False
+        if flag:  
+            error()
 
 
 # no : stop
@@ -264,13 +315,14 @@ def facs():
     
     while True:
         response = talk()
+        flag = True
         if response is False:
             return
         elif re.search(r"\bno\b", response):
             reface("sad", 5)
             print(random.choice(noproblem) + " se hai ancora bisogno di me chiamami!")
             textSpeech(random.choice(noproblem) + " se hai ancora bisogno di me chiamami!")
-            reface("sleepy", 0)
+            reface("sleepy", 5)
             return
         for word in ok:
             if re.search(word, response):
@@ -278,28 +330,12 @@ def facs():
                 print(random.choice(realfacs))
                 textSpeech(random.choice(realfacs))
                 reface("surprise", 5)
+                print("ne vuoi sentire un altro?")
                 textSpeech("ne vuoi sentire un altro?")
+                flag = False
                 
-                while True:
-                    response = talk()
-                    if response is False:
-                        return
-                    elif re.search(r"\bno\b", response):
-                        print(random.choice(noproblem))
-                        textSpeech(random.choice(noproblem) + " se hai ancora bisogno di me chiamami!")
-                        reface("wink", 0)
-                        return
-                    for wor in ok:
-                        if re.search(wor, response):
-                            print("va bene, " + random.choice(realfacs))
-                            textSpeech(random.choice(noproblem) + random.choice(realfacs))
-                            reface("surprise", 5)
-                            textSpeech("ne vuoi sentire un altro?")
-                            flag = False
-
-                    if flag:
-                        error()
-        error()
+        if flag:
+            error()
     
 
 # no: chiede se vuole sentire una curiosità
@@ -326,7 +362,6 @@ def richiesta():
                 print(random.choice(noproblem) + " cosa vorresti vedere?")
                 textSpeech(random.choice(noproblem) + " cosa vorresti vedere?")
                 reface("happy", 0)
-                print("prova")
                 
                 while True:
                     response = talk()
@@ -788,12 +823,12 @@ def error():
 if __name__ == '__main__':
     print('Press Ctrl+C to stop the program')
     process2 = multiprocessing.Process(target=face)
-    process3 = multiprocessing.Process(target=chatInit)
     process1 = multiprocessing.Process(target=default)
+    process4 = multiprocessing.Process(target=track)
     process1.start()
     process2.start()
-    process3.start()
-    time.sleep(1)
+    time.sleep(2)
+    process4.start()
     signal.signal(signal.SIGINT, signal_handler)
 
 

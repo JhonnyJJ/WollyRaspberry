@@ -4,7 +4,7 @@ import re
 import speech_recognition as sr
 from gtts import gTTS
 from pygame import mixer
-#from Dialog import *
+from Dialog import *
 from frasiDialog import *
 
 
@@ -14,7 +14,7 @@ def playsound(filepath):
     mixer.music.play()
     while mixer.music.get_busy():
         time.sleep(0.01)
-    # pygame.quit()   #windows debug
+
 
 def textSpeech(text):
     tts = gTTS(text=text, lang='it')
@@ -34,9 +34,9 @@ def talk():
             r.adjust_for_ambient_noise(source, 0.8)
             # add sound to help to know when to talk
             playsound("../../mp3/hearing.mp3")
-            time.sleep(0.8)
+            time.sleep(1.3)
             print("ascolto")
-            audio = r.listen(source, phrase_time_limit=6, timeout=None)
+            audio = r.listen(source, timeout=None, phrase_time_limit = 8)
 
         try:
             response = r.recognize_google(audio, language="IT-IT")
@@ -46,7 +46,7 @@ def talk():
         except sr.UnknownValueError:
             i = i - 1
             if i != 0:
-                print("non ho capito, puoi ripetere?")
+                print(random.choice(notundst))
                 textSpeech(random.choice(notundst))
             else:
                 print("non riesco a capirti! vado a ricalibrare il mio microfono!")
@@ -55,17 +55,20 @@ def talk():
             
             
 # hardcoded chatbot 
-def chat(response):  
+def chat():  
     while True:
+        response = talk()
+        if response is False:
+            return
         if re.search(r"\bno\b", response):
             print(random.choice(noproblem) + random.choice(allora))
             textSpeech(random.choice(noproblem) + random.choice(allora))
-            return #curioso(talk())
+            return curioso()
         for word in ok:
             if re.search(word, response):  # parla di quello che sa fare wolly
                 print(random.choice(fare))
                 textSpeech(random.choice(ecco) + random.choice(fare) + random.choice(vedere))
-                return #richiesta(talk())
+                return richiesta()
 
         # stop immediately
         for word in niente:
@@ -75,7 +78,6 @@ def chat(response):
                 return
             
         error()
-        response = talk()
 
 
 def chatInit():
@@ -84,7 +86,7 @@ def chatInit():
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source, 1)
             print("ascolto")
-            audio = r.listen(source, timeout=None, phrase_time_limit=6)
+            audio = r.listen(source, timeout=None, phrase_time_limit = 10)
 
         try:
             text = r.recognize_google(audio, language="IT-IT")
@@ -93,21 +95,16 @@ def chatInit():
                 if re.search(word, text.lower()):
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
-
-                    response = talk()
-                    if response is not False:
-                        chat(response)
+                    chat()
 
         except sr.UnknownValueError:
             print("---------Non ho capito---------")
         except sr.RequestError as e:
             print("Errore con il collegamento API: {0}".format(e))
-
-def error():
-    print(random.choice(err) + " potresti ripetere?")
-    textSpeech(random.choice(err) + " potresti ripetere?")
-
             
+def error():
+    print(random.choice(err) + " Ripeti quello che hai detto")
+    textSpeech(random.choice(err) + " Ripeti quello che hai detto")
 
 if __name__ == '__main__':
     chatInit()
