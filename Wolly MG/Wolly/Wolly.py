@@ -15,6 +15,11 @@ from gtts import gTTS
 # import tracking
 import cv2
 
+#import AppWrite
+from appwrite.client import Client
+from appwrite.services.database import Database
+from appwrite.services.storage import Storage
+
 # import dialog
 import random
 import re
@@ -26,12 +31,12 @@ from motorsNew import *
 
 # signal handler per ctrl+c alla fine del programma
 def signal_handler(sig, frame):
-    global process2, process3
+    global process2, process3, process4
     print('You ended the program')
     process1.terminate()
     process2.terminate()
-    process4.terminate()
     process3.terminate()
+    process4.terminate()
     time.sleep(3)
     sys.exit(0)
 
@@ -55,7 +60,6 @@ def default():
 #face tracking che dopo aver visto una persona ascolta se viene chiamato
 
 def track():
-    global process3
     # cascade classifier for face tracking
     face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
 
@@ -89,33 +93,35 @@ def track():
         print(len(faces))
 
         # if the number of faces is greater than 0 wolly will introduce himself
-        if 0 < len(faces) != 0:
+        if 0 < len(faces):
             print("TTS", len(faces))
             textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
-            
-            while True:
-                r = sr.Recognizer()
-                with sr.Microphone() as source:
-                    r.adjust_for_ambient_noise(source, 1)
-                    print("ascolto")
-                    audio = r.listen(source, timeout=None, phrase_time_limit = 10)
-
-                try:
-                    text = r.recognize_google(audio, language="IT-IT")
-
-                    for word in wword:
-                        if re.search(word, text.lower()):
-                            print(random.choice(responses) + random.choice(posso))
-                            textSpeech(random.choice(responses) + random.choice(posso))
-                            reface("happy",0)
-                            chat() #aggiungere variabile per uscire dall'ascolto chat
-
-                except sr.UnknownValueError:
-                    print("---------Non ho capito---------")
-                except sr.RequestError as e:
-                    print("Errore con il collegamento API: {0}".format(e))
+            chatInit()
             
 
+def chatInit():
+    while True:
+        r = sr.Recognizer()
+        with sr.Microphone() as source:
+            r.adjust_for_ambient_noise(source, 1)
+            print("ascolto")
+            audio = r.listen(source, timeout=None, phrase_time_limit=10)
+
+        try:
+            text = r.recognize_google(audio, language="IT-IT")
+
+            for word in wword:
+                if re.search(word, text.lower()):
+                    print(random.choice(responses) + random.choice(posso))
+                    textSpeech(random.choice(responses) + random.choice(posso))
+                    reface("happy", 0)
+                    return chat()  # aggiungere variabile per uscire dall'ascolto chat
+
+        except sr.UnknownValueError:
+            print("---------Non ho capito---------")
+        except sr.RequestError as e:
+            print("Errore con il collegamento API: {0}".format(e))
+            
 
 #-----------------fine track face proc4------------------
             
@@ -186,7 +192,62 @@ def niamPool():
 
 # ----------fine processo faccia--------------
 
-# ------------------PROCESSO 3------------------
+
+# ----------------processo master---------------
+
+def print_green(prt):
+    print("\033[32;1m" + str(prt) + "\033[0m")
+def execJson(response):
+    global dateOldMossa
+    document = response["documents"][0]
+    print('eta: ' + document["eta"])
+    if document["eta"] != dateOldMossa:
+        dateOldMossa = document['eta']
+        print('Nuovo comando')
+        exec(document["mosse"])
+
+def list_doc():
+    database = Database(client)
+    print_green("Running List Document API")
+    response = database.list_documents(collectionId)
+    execJson(response)
+
+def master():
+    global process4
+    while True:
+        database = Database(client)
+        response = database.list_documents(collectionId)
+        document = response["documents"][0]
+        autonomo = document["autonomo"]
+        process4 = multiprocessing.Process(target=track)
+
+        if autonomo:
+            process4.start()
+        elif not autonomo:
+            process4.start()
+            process4.terminate()
+            list_doc()
+            print('old mossa: ' + dateOldMossa)
+
+        while True:
+            database = Database(client)
+            response = database.list_documents(collectionId)
+            document = response["documents"][0]
+            autonomia = document["autonomo"]
+
+            if not autonomo:
+                list_doc()
+                print('old mossa: ' + dateOldMossa)
+
+            if autonomo != autonomia:
+                if autonomo:
+                    process4.terminate()
+                break
+
+# ----------------fine processo master---------------
+
+
+# ------------------metodi per la chat------------------
 # terzo processo chat, usa reface per cambiare faccia
 def playsound(filepath):
     mixer.init()
@@ -252,7 +313,7 @@ def chat():
             if re.search(word, response):  # parla di quello che sa fare wolly
                 print(random.choice(fare))
                 textSpeech(random.choice(ecco) + random.choice(fare) + random.choice(vedere))
-                reface("happy",0)
+                reface("happy", 0)
                 return richiesta()
 
         # stop immediately
@@ -279,7 +340,8 @@ def change(espr, tempo):
     process2.start()
     time.sleep(tempo)
 
-# ----------fine secondo processo -----------
+# ----------fine metodi per la chat-----------
+
 
 # ---------------------DIALOG---------------------
 # si: curiosità di wolly
@@ -822,13 +884,13 @@ def error():
 
 if __name__ == '__main__':
     print('Press Ctrl+C to stop the program')
-    process2 = multiprocessing.Process(target=face)
-    process1 = multiprocessing.Process(target=default)
-    process4 = multiprocessing.Process(target=track)
+    process1 = multiprocessing.Process(target=default)  # faccia in background per coprire lo schermo
+    process2 = multiprocessing.Process(target=face) # faccia
+    process3 = multiprocessing.Process(target=master) # controllo se wolly è autonomo o no
     process1.start()
     process2.start()
     time.sleep(2)
-    process4.start()
+    process3.start()
     signal.signal(signal.SIGINT, signal_handler)
 
 

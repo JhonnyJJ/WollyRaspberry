@@ -25,7 +25,6 @@ def textSpeech(text):
 def track():
     global process3
     while True:
-
         print("TTS" )
         textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
         print("inizio")
@@ -47,4 +46,9 @@ if __name__ == '__main__':
     print('Press Ctrl+C to stop the program')
     process4 = multiprocessing.Process(target=track)
     process4.start()
+    print("prova")
+    time.sleep(3)
+    print("prova")
+    print("prova")
+    process4.terminate()
     signal.signal(signal.SIGINT, signal_handler)
