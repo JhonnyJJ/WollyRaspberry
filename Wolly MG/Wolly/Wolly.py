@@ -20,6 +20,8 @@ from appwrite.client import Client
 from appwrite.services.database import Database
 from appwrite.services.storage import Storage
 
+import urllib3
+
 # import dialog
 import random
 import re
@@ -59,8 +61,12 @@ client.set_project(PROJECT_ID)
 client.set_key(API_KEY)
 # client.add_header("Origin", ENDPOINT)
 
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+
 collectionId = '60d2f79f5ffc1'
 userId = '60d2f78729a5c'
+
+dateOldMossa = ""
 
 #--------------fine configurazione appwrite----------------
 
@@ -118,6 +124,7 @@ def track():
             print("TTS", len(faces))
             textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
             chatInit()
+    cap.release()
             
 
 def chatInit():
@@ -215,9 +222,9 @@ def niamPool():
 
 
 # ----------------processo master---------------
-
 def print_green(prt):
     print("\033[32;1m" + str(prt) + "\033[0m")
+    
 def execJson(response):
     global dateOldMossa
     document = response["documents"][0]
@@ -245,8 +252,6 @@ def master():
         if autonomo:
             process4.start()
         elif not autonomo:
-            process4.start()
-            process4.terminate()
             time.sleep(2)
             list_doc()
             print('old mossa: ' + dateOldMossa)
@@ -264,6 +269,7 @@ def master():
             if autonomo != autonomia:
                 if autonomo:
                     process4.terminate()
+                    time.sleep(5)
                 break
 
 # ----------------fine processo master---------------

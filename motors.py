@@ -97,8 +97,9 @@ def led(status):
     ----------------------------------
 """
 
-host_name = '192.168.43.103'  # Change this to your Raspberry Pi IP address
-host_port = 8000
+host_name = '192.168.43.103'
+host_port = '8000'
+
 
 """
     inizio istruzioni per pilotare i motori con i2c_bus
