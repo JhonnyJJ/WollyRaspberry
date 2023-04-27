@@ -87,6 +87,7 @@ def default():
 #face tracking che dopo aver visto una persona ascolta se viene chiamato
 
 def track():
+    global cap
     # cascade classifier for face tracking
     face_cascade = cv2.CascadeClassifier('/home/wolly/Desktop/WollyRaspberry/lib/haarcascade_frontalface_default.xml')
 
@@ -150,7 +151,6 @@ def chatInit():
         except sr.RequestError as e:
             print("Errore con il collegamento API: {0}".format(e))
             
-
 #-----------------fine track face proc4------------------
             
 
@@ -247,10 +247,9 @@ def master():
         response = database.list_documents(collectionId)
         document = response["documents"][0]
         autonomo = document["autonomo"]
-        process4 = multiprocessing.Process(target=track)
 
         if autonomo:
-            process4.start()
+            startProc()
         elif not autonomo:
             time.sleep(2)
             list_doc()
@@ -268,9 +267,19 @@ def master():
 
             if autonomo != autonomia:
                 if autonomo:
-                    process4.terminate()
-                    time.sleep(5)
+                    stopProc()
                 break
+
+def startProc():
+    global process4
+    process4 = multiprocessing.Process(target=track)
+    process4.start()
+
+def stopProc():
+    global process4, cap
+    cap.release()
+    process4.terminate()
+    time.sleep(4)
 
 # ----------------fine processo master---------------
 
