@@ -70,6 +70,63 @@ dateOldMossa = ""
 
 #--------------fine configurazione appwrite----------------
 
+
+# ----------------processo master---------------
+def print_green(prt):
+    print("\033[32;1m" + str(prt) + "\033[0m")
+    
+def execJson(response):
+    global dateOldMossa
+    document = response["documents"][0]
+    print('eta: ' + document["eta"])
+    if document["eta"] != dateOldMossa:
+        dateOldMossa = document['eta']
+        print('Nuovo comando')
+        exec(document["mosse"])
+
+def list_doc():
+    database = Database(client)
+    print_green("Running List Document API")
+    response = database.list_documents(collectionId)
+    execJson(response)
+
+def master():
+    while True:
+        chat = False
+        database = Database(client)
+        response = database.list_documents(collectionId)
+        document = response["documents"][0]
+        autonomo = document["autonomo"]
+        
+        if autonomo:
+            process4 = multiprocessing.Process(target=track)
+            process4.start()
+            print("autonomo")
+            chat = True
+        elif not autonomo:
+            print("blockly")
+            list_doc()
+            print('old mossa: ' + dateOldMossa)
+
+        while True:
+            database = Database(client)
+            response = database.list_documents(collectionId)
+            document = response["documents"][0]
+            autonomia = document["autonomo"]
+            
+            if not autonomo:
+                list_doc()
+                print('old mossa: ' + dateOldMossa)
+
+            if autonomo != autonomia:
+                if chat:
+                    print("close proc") 
+                    process4.terminate()
+                break
+
+# ----------------fine processo master---------------
+
+
 # ------------------PROCESSO 1------------------
 # processo 1 tiene la faccia default in sfondo
 def default():
@@ -125,7 +182,6 @@ def track():
             print("TTS", len(faces))
             textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
             chatInit()
-    cap.release()
             
 
 def chatInit():
@@ -219,70 +275,6 @@ def niamPool():
         root.after(5000, niamPool)
 
 # ----------fine processo faccia--------------
-
-
-# ----------------processo master---------------
-def print_green(prt):
-    print("\033[32;1m" + str(prt) + "\033[0m")
-    
-def execJson(response):
-    global dateOldMossa
-    document = response["documents"][0]
-    print('eta: ' + document["eta"])
-    if document["eta"] != dateOldMossa:
-        dateOldMossa = document['eta']
-        print('Nuovo comando')
-        exec(document["mosse"])
-
-def list_doc():
-    database = Database(client)
-    print_green("Running List Document API")
-    response = database.list_documents(collectionId)
-    execJson(response)
-
-def master():
-    global process4
-    while True:
-        database = Database(client)
-        response = database.list_documents(collectionId)
-        document = response["documents"][0]
-        autonomo = document["autonomo"]
-
-        if autonomo:
-            startProc()
-        elif not autonomo:
-            time.sleep(2)
-            list_doc()
-            print('old mossa: ' + dateOldMossa)
-
-        while True:
-            database = Database(client)
-            response = database.list_documents(collectionId)
-            document = response["documents"][0]
-            autonomia = document["autonomo"]
-
-            if not autonomo:
-                list_doc()
-                print('old mossa: ' + dateOldMossa)
-
-            if autonomo != autonomia:
-                if autonomo:
-                    stopProc()
-                break
-
-def startProc():
-    global process4
-    process4 = multiprocessing.Process(target=track)
-    process4.start()
-
-def stopProc():
-    global process4, cap
-    cap.release()
-    process4.terminate()
-    time.sleep(4)
-
-# ----------------fine processo master---------------
-
 
 # ------------------metodi per la chat------------------
 # terzo processo chat, usa reface per cambiare faccia
