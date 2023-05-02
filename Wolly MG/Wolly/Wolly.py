@@ -71,6 +71,10 @@ dateOldMossa = ""
 
 
 # ----------------processo master---------------
+# Questo processo controlla il database del dip Unito e se il valore autonomo è True fa partire il process4 che è la chat, altrimenti controlla quali mosse sono state inserite in blockly e le esegue,
+# il processo master sta in ascolto del database e controlla per un cambiamento al valore autonomo,
+# se cambia, controlla quale era lo stato precedente: se era True chiude il process2(la faccia "dinamica") e chiude anche il process4(la chat), mentre se era False chiude solo il process2
+# in entrambi i casi trona ad ascoltare il database e il ciclo ri inizia
 def print_green(prt):
     print("\033[32;1m" + str(prt) + "\033[0m")
     
@@ -135,21 +139,9 @@ def master():
 # ----------------fine processo master---------------
 
 
-# ------------------PROCESSO 1------------------
-# processo 1 tiene la faccia default in sfondo
-def default():
-    t = Tk()
-    t.attributes('-fullscreen', True)
-    direct = "/home/wolly/Desktop/WollyRaspberry/img/faces/default/6.png"
-    label = Label(t)
-    label.pack()
-    im = ImageTk.PhotoImage(Image.open(direct))
-    label.configure(image=im)
-    t.mainloop()
-# ----------fine processo 1--------------
-
 # -------------TRACK FACE proc4-----------------
-#face tracking che dopo aver visto una persona ascolta se viene chiamato
+# processo che apre la telecamera e controlla se ci sono persone davanti,
+# se ci sono una o più persone davanti saluta e spiega come interagire con Wolly, di seguito resta in ascolto e parte la chat dopo essere stato chiamato
 
 def track():
     global cap
@@ -218,9 +210,10 @@ def chatInit():
             
 
 # ------------------PROCESSO 2------------------
-# permette il cambio di faccia, utilizzando espressione come globale per essere accessibile al secondo processo
-espressione = "default"
+# permette il cambio di faccia, utilizzando "espressione" come globale per essere accessibile
+# il metodo reface ha bisogno di una string e di un int che serve per decidere per quanto tempo deve essere mostrata la faccia
 
+espressione = "default"
 
 def face():
     global label, x, espressione, root, p, frames
@@ -229,10 +222,10 @@ def face():
     frames = 50
     x = 1
     p = 1
-    # initialize a Tk structure
+    # inizializza una Tk structure
     root.attributes('-fullscreen', True)
 
-    # we create the label and then configure it with the image
+    # creiamo la label e la configuriamo con l'immagine
 
     label = Label(root)
     label.pack()
@@ -283,8 +276,25 @@ def niamPool():
 
 # ----------fine processo faccia--------------
 
+
+# ------------------PROCESSO 1------------------
+# processo 1 tiene la faccia default in sfondo per coprire lo schermo
+def default():
+    t = Tk()
+    t.attributes('-fullscreen', True)
+    direct = "/home/wolly/Desktop/WollyRaspberry/img/faces/default/6.png"
+    label = Label(t)
+    label.pack()
+    im = ImageTk.PhotoImage(Image.open(direct))
+    label.configure(image=im)
+    t.mainloop()
+# ----------fine processo 1--------------
+
+
 # ------------------metodi per la chat------------------
-# terzo processo chat, usa reface per cambiare faccia
+# metodi utilizzati per la chat, "talk()" viene invocato ogni volta ceh c'è bisogno di una risposta da parte dell'utente
+# reface invece serve per cambiare faccia a Wolly
+
 def playsound(filepath):
     mixer.init()
     mixer.music.load(filepath)
@@ -380,6 +390,8 @@ def change(espr, tempo):
 
 
 # ---------------------DIALOG---------------------
+# metodi per il dialog HARDCODED di Wolly
+
 # si: curiosità di wolly
 # no: fatti assurdi
 def curioso():
