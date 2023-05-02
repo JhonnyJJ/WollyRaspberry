@@ -122,6 +122,7 @@ def master():
             autonomia = document["autonomo"]
             
             if not autonomo:
+                time.sleep(3)
                 list_doc()
                 print('old mossa: ' + dateOldMossa)
 
