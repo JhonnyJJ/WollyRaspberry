@@ -33,10 +33,9 @@ from motorsNew import *
 
 # signal handler per ctrl+c alla fine del programma
 def signal_handler(sig, frame):
-    global process2, process3, process4
+    global process1, process3
     print('You ended the program')
     process1.terminate()
-    process2.terminate()
     process3.terminate()
     time.sleep(3)
     sys.exit(0)
@@ -91,7 +90,10 @@ def list_doc():
     execJson(response)
 
 def master():
+    global process2
     while True:
+        process2 = multiprocessing.Process(target=face)
+        process2.start()
         chat = False
         database = Database(client)
         response = database.list_documents(collectionId)
@@ -99,10 +101,13 @@ def master():
         autonomo = document["autonomo"]
         
         if autonomo:
-            process4 = multiprocessing.Process(target=track)
-            process4.start()
             print("autonomo")
-            chat = True
+            chat = track()
+            if chat == True:
+                print("TTS")
+                textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
+                process4 = multiprocessing.Process(target=chatInit)
+                process4.start()
         elif not autonomo:
             print("blockly")
             list_doc()
@@ -120,8 +125,11 @@ def master():
 
             if autonomo != autonomia:
                 if chat:
+                    process2.terminate()
                     print("close proc") 
                     process4.terminate()
+                else:
+                    process2.terminate()
                 break
 
 # ----------------fine processo master---------------
@@ -150,8 +158,8 @@ def track():
 
     # inizializing camera capture
     cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320);
-    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200);
+    cap.set(cv2.CAP_PROP_FRAME_WIDTH, 320)
+    cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 200)
     time.sleep(1)
 
     # Check if the webcam is opened correctly
@@ -179,9 +187,8 @@ def track():
 
         # if the number of faces is greater than 0 wolly will introduce himself
         if 0 < len(faces):
-            print("TTS", len(faces))
-            textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
-            chatInit()
+            cap.release()
+            return 1
             
 
 def chatInit():
@@ -914,10 +921,8 @@ def error():
 if __name__ == '__main__':
     print('Press Ctrl+C to stop the program')
     process1 = multiprocessing.Process(target=default)  # faccia in background per coprire lo schermo
-    process2 = multiprocessing.Process(target=face) # faccia che si chiude e si riapre ogni volta che si cambia espressione
-    process3 = multiprocessing.Process(target=master) # controllo se wolly è autonomo o no
+    process3 = multiprocessing.Process(target=master) # controllo se wolly è autonomo o no, crea processo faccia che si chiude e si riapre ogni volta che si cambia espressione
     process1.start()
-    process2.start()
     time.sleep(2)
     process3.start()
     signal.signal(signal.SIGINT, signal_handler)
