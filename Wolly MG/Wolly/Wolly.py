@@ -108,8 +108,6 @@ def master():
             print("autonomo")
             chat = track()
             if chat == True:
-                print("TTS")
-                textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
                 process4 = multiprocessing.Process(target=chatInit)
                 process4.start()
         elif not autonomo:
@@ -180,10 +178,12 @@ def track():
         # if the number of faces is greater than 0 wolly will introduce himself
         if 0 < len(faces):
             cap.release()
-            return 1
+            return True
             
 
 def chatInit():
+    print("TTS")
+    textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
     while True:
         r = sr.Recognizer()
         with sr.Microphone() as source:
