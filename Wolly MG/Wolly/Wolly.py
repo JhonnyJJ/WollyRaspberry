@@ -134,6 +134,7 @@ def master():
                     print("close proc") 
                     event.set()
                     process4.join()
+                    event.clear()
                 else:
                     process2.terminate()
                 break
@@ -186,6 +187,7 @@ def track():
             
 
 def chatInit(event):
+    global process2
     print("TTS")
     textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
     while not event.is_set():
@@ -203,7 +205,7 @@ def chatInit(event):
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
                     reface("happy", 0)
-                    return chat()  # aggiungere variabile per uscire dall'ascolto chat
+                    chat()  # aggiungere variabile per uscire dall'ascolto chat
 
         except sr.UnknownValueError:
             print("---------Non ho capito---------")
