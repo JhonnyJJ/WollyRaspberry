@@ -129,7 +129,6 @@ def master():
 
             if autonomo != autonomia:
                 if chat:
-                    process2.terminate()
                     time.sleep(3)
                     print("close proc") 
                     event.set()
