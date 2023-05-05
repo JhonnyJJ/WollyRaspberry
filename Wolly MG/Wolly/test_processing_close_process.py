@@ -1,28 +1,17 @@
 import multiprocessing
 import time
-from os import kill
+
 from os import getpid
-from signal import SIGKILL
 
-def chiudi2():
-    global process2, pids
-    process2.terminate()
-    start2()
-
-def start2():
-    global process2, pids
+    
+    
+    
+def chatInit(event):
+    global process2
+    print("chiusura faccia")
     process2 = multiprocessing.Process(target=faccia)
     process2.start()
     print("riapro faccia")
-    
-    
-    
-    
-    
-def chatInit(event, i):
-    global process2
-    print("chiusura faccia")
-    chiudi2()
     while not event.is_set():
         print("chat {}".format(multiprocessing.current_process().pid))
         time.sleep(2)
@@ -43,7 +32,8 @@ def master():
     process2 = multiprocessing.Process(target=faccia)
     process2.start()
     time.sleep(3)
-    process3 = multiprocessing.Process(target=chatInit, args=(event, i))
+    process2.terminate()
+    process3 = multiprocessing.Process(target=chatInit, args=(event,))
     process3.start()
     print("aspetto chiusura p2")
     time.sleep(10)

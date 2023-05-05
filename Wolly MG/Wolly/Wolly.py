@@ -95,6 +95,7 @@ def list_doc():
 
 def master():
     global process2
+    event = multiprocessing.Event()
     while True:
         process2 = multiprocessing.Process(target=face)
         process2.start()
@@ -108,7 +109,7 @@ def master():
             print("autonomo")
             chat = track()
             if chat == True:
-                process4 = multiprocessing.Process(target=chatInit)
+                process4 = multiprocessing.Process(target=chatInit, args=(event,))
                 process4.start()
         elif not autonomo:
             print("blockly")
@@ -131,7 +132,8 @@ def master():
                     process2.terminate()
                     time.sleep(3)
                     print("close proc") 
-                    process4.terminate()
+                    event.set()
+                    process4.join()
                 else:
                     process2.terminate()
                 break
@@ -183,10 +185,10 @@ def track():
             return True
             
 
-def chatInit():
+def chatInit(event):
     print("TTS")
     textSpeech(random.choice(ciao) + random.choice(ascolto) + random.choice(quando))
-    while True:
+    while not event.is_set():
         r = sr.Recognizer()
         with sr.Microphone() as source:
             r.adjust_for_ambient_noise(source, 1)
@@ -207,6 +209,7 @@ def chatInit():
             print("---------Non ho capito---------")
         except sr.RequestError as e:
             print("Errore con il collegamento API: {0}".format(e))
+    process2.terminate()
             
 #-----------------fine track face proc4------------------
             
