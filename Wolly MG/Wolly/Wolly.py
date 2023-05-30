@@ -197,10 +197,10 @@ def chatInit(event):
             audio = r.listen(source, timeout=None, phrase_time_limit=10)
 
         try:
-            text = r.recognize_google(audio, language="IT-IT")
+            response = r.recognize_google(audio, language="IT-IT")
 
             for word in wword:
-                if re.search(word, text.lower()):
+                if re.search(word, response):
                     print(random.choice(responses) + random.choice(posso))
                     textSpeech(random.choice(responses) + random.choice(posso))
                     reface("happy", 0)
@@ -239,7 +239,7 @@ def face():
     root.mainloop()
 
 
-# "piccolo" è una variabile per capire se stiamo usando una variabile con meno di n "frames" (può essere scalato a piacimento)
+# "piccolo" è una variabile per capire se stiamo usando un'animazione con meno di n "frames" (può essere scalato a piacimento)
 # "p" è il contatore per "piccolo" che si ri azzera per poter rifare il ciclo sull'animazione corta (così fa il loop dell'animazione per avere almeno n "frames" totali)
 # "piccolo" viene anche usato in niampoll per poter iniziare una nuova animazione prima, in caso sia stata fatta un'animazione breve
 def loop():
@@ -248,13 +248,13 @@ def loop():
     face = [name for name in os.listdir(DIR) if os.path.isfile(os.path.join(DIR, name)) and ".png" in name]
     lunghezza = len(face)
     if lunghezza <= frames:
-        lenght = frames
+        length = frames
         piccolo = 1
     else:
-        lenght = lunghezza
+        length = lunghezza
         piccolo = 0
 
-    if x <= lenght:
+    if x <= length:
         if piccolo == 1:
             if p >= lunghezza:
                 p = 1
@@ -566,7 +566,6 @@ def ripRichiesta():
 
 
 def cantare():
-    movimento = [0, 1]
     durata = [0.2, 0.1]
     canta = ["../../mp3/alien_sound.mp3", "../../mp3/pavarotti.mp3"]
     mixer.init()
@@ -938,8 +937,8 @@ def error():
 
 if __name__ == '__main__':
     print('Press Ctrl+C to stop the program')
-    process1 = multiprocessing.Process(target=default)  # faccia in background per coprire lo schermo
-    process3 = multiprocessing.Process(target=master) # controllo se wolly è autonomo o no, crea processo faccia che si chiude e si riapre ogni volta che si cambia espressione
+    process1 = multiprocessing.Process(target=default)              # faccia in background per coprire lo schermo
+    process3 = multiprocessing.Process(target=master)                       # controllo se wolly è autonomo o no, crea processo faccia che si chiude e si riapre ogni volta che si cambia espressione
     process1.start()
     time.sleep(2)
     process3.start()
