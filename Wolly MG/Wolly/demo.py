@@ -13,6 +13,7 @@ import signal
 import sys
 import multiprocessing
 
+
 def signal_handler(sig, frame):
     global process1, process3
     print('You ended the program')
@@ -26,15 +27,6 @@ def master():
     process2 = multiprocessing.Process(target=face)
     process2.start()
     time.sleep(2)
-    textSpeech("ciao sono wolly, sono il robottino del dipartimento di informatica di Torino")
-    textSpeech("Ti dico un fatto simpatico su di me")
-    textSpeech("lo sapevi che " + random.choice(curiosita))
-    reface("wink", 4)
-    textSpeech("so fare tante cose come ad esempio ballare, guarda qui")
-    ballare()
-    textSpeech("evviva, che divertimento!")
-    textSpeech("so anche cantare, senti che voce!")
-    cantare()
     textSpeech("posso farti anche ridere con una battuta")
     print(random.choice(battuta))
     textSpeech(random.choice(battuta))
