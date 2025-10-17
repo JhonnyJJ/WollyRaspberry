@@ -17,8 +17,9 @@ import cv2
 
 #import AppWrite
 from appwrite.client import Client
-from appwrite.services.database import Database
+from appwrite.services.databases import Databases
 from appwrite.services.storage import Storage
+
 
 import urllib3
 
@@ -64,6 +65,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 collectionId = '68e6c7670001f5068527'
 userId = '68e6d30700399e09b501'
+databaseId = '68e6c75a00267bc0a9b9'
 
 dateOldMossa = ""
 
@@ -88,9 +90,9 @@ def execJson(response):
         exec(document["mosse"])
 
 def list_doc():
-    database = Database(client)
+    database = Databases(client)
     print_green("Running List Document API")
-    response = database.list_documents(collectionId)
+    response = database.list_documents(databaseId, collectionId)
     execJson(response)
 
 def master():
@@ -100,8 +102,8 @@ def master():
         process2 = multiprocessing.Process(target=face)
         process2.start()
         chat = False
-        database = Database(client)
-        response = database.list_documents(collectionId)
+        database = Databases(client)
+        response = database.list_documents(databaseId, collectionId)
         document = response["documents"][0]
         autonomo = document["autonomo"]
         
@@ -117,8 +119,8 @@ def master():
             print('old mossa: ' + dateOldMossa)
 
         while True:
-            database = Database(client)
-            response = database.list_documents(collectionId)
+            database = Databases(client)
+            response = database.list_documents(databaseId, collectionId)
             document = response["documents"][0]
             autonomia = document["autonomo"]
             
