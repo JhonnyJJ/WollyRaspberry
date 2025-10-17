@@ -10,9 +10,9 @@ import urllib3
 # PROJECT_ID = '5fa7e32a5133e'
 # API_KEY = '51935101e4598b8a6c6722c919757eab00614c5cf07320d2d4e894a9fc178dfc6e44f9811ac2426d16027197435c663f25665f5f1661aa00d345fb8bef2a177c2ddbee5727e26cb348c99f5a54507f81897a13602b2af124255f7375867cf183c0afbedaa361b4eed1581d94366a327f81588fe233de9282e098ff7207530301'
 
-ENDPOINT = 'http://app.wolly.di.unito.it/v1'
-PROJECT_ID = '60cc80c053637'
-API_KEY = '15735ace9c277263e68936020652843ed788409e79f9f2ca745fe4179d82e7f25de27e83dee7161e9b747540161f0902ba077f0e10844ac2bbdc639386e4a98de2dc5c3db62356d7cb3003e3bb4cd881e065b3f5bdcae8ad45b546e7a02dbac0f2d88a6c6df411611c19673e3e498cdaefcfcd0d0d055d92bf531dd3b6e350d8'
+ENDPOINT = 'http://app.wollybrain.di.unito.it/v1'
+PROJECT_ID = '68e6c71b003332bc20b7'
+API_KEY = 'standard_786402a023b1896fd3c5c2f41ab730dc7d338bf0522bffbf1fdbdb3abccac3633069d35cd465daf557ebbb8a7429d2bfa144df08e7591e9a1d7d610dad18ed161cc735c98add6ff0dbf6ef3d409f845754923cd767e73a5c801e839d2035dedca0003569c5ee96dcc72f9e818e72d9b79d987303232b1596153aee7120ebfd50'
 
 client = Client()
 
@@ -23,8 +23,8 @@ client.set_key(API_KEY)
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-collectionId = '60d2f79f5ffc1'
-userId = '60d2f78729a5c'
+collectionId = '68e6c7670001f5068527'
+userId = '68e6d30700399e09b501'
 
 dateOldMossa = ""
 
